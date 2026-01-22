@@ -2,14 +2,14 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace BetterRyn;
+namespace BetterRyn.Gameplay;
 
-public class Game1 : Game
+public class GameplayScreen : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    public Game1()
+    public GameplayScreen()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
