@@ -1,0 +1,10 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note1.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/mania-note1.xnb","TextureProcessor","Texture2DContent",3055,111701,0.0650843
+"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note1h.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/mania-note1h.xnb","TextureProcessor","Texture2DContent",3055,111701,0.004838
+"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note1l.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/mania-note1l.xnb","TextureProcessor","Texture2DContent",3055,111701,0.0043529
+"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note2.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/mania-note2.xnb","TextureProcessor","Texture2DContent",3051,111701,0.0024421
+"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note2H.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/mania-note2H.xnb","TextureProcessor","Texture2DContent",3051,111701,0.0030458
+"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note2L.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/mania-note2L.xnb","TextureProcessor","Texture2DContent",3051,111701,0.0023651
+"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-notes.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/mania-notes.xnb","TextureProcessor","Texture2DContent",3055,111701,0.0029028
+"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-notesh.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/mania-notesh.xnb","TextureProcessor","Texture2DContent",3055,111701,0.0040825
+"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-notesl.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/mania-notesl.xnb","TextureProcessor","Texture2DContent",3055,111701,0.0022603
