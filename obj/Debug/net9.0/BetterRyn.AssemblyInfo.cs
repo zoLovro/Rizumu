@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BetterRyn")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1d9fce2e2ce7cf20f810a01db0e5daa4187a90e0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0823b0ecae6356e7887be41b2f2a647cd38a6392")]
 [assembly: System.Reflection.AssemblyProductAttribute("BetterRyn")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BetterRyn")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
