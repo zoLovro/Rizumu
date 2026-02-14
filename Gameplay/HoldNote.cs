@@ -9,7 +9,7 @@ public class HoldNote : Note
     private readonly float _duration;
     private readonly float _scrollSpeed;
     
-    public HoldNote(float time, float duration, int lane, float scrollSpeed, Texture2D texture) : base(time, lane)
+    public HoldNote(float time, float duration, int lane, float scrollSpeed, Texture2D texture, float x) : base(time, lane, x)
     {
         _holdNoteTexture = texture;
         _duration = duration;

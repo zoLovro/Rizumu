@@ -8,7 +8,7 @@ public class TapNote : Note
     private readonly Texture2D _tapNoteTexture;
     private readonly float _scrollSpeed;
     
-    public TapNote(float time, int lane, float scrollSpeed, Texture2D texture) : base(time, lane)
+    public TapNote(float time, int lane, float scrollSpeed, Texture2D texture, float x) : base(time, lane, x)
     {
         _tapNoteTexture = texture;
         _scrollSpeed = scrollSpeed;
