@@ -75,3 +75,12 @@ C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\mania-note2L.
 C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\mania-notes.xnb
 C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\mania-notesh.xnb
 C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\mania-notesl.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-note1.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-note1h.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-note1l.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-note2.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-note2H.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-note2L.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-notes.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-notesh.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-notesl.xnb

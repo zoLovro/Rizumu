@@ -18,8 +18,8 @@ public class NoteManager
     public Queue<NoteData> noteQueue = new Queue<NoteData>();
     public float ScrollSpeed = 100f;
     private readonly int _hitLine = 50;
-    private readonly int _spawnWindow = 1000;
-    private readonly int _despawnTime = 100;
+    private readonly int _spawnWindow = 5000;
+    private readonly int _despawnTime = 6000;
     private readonly float[] _laneX = { 100f, 400f, 700f, 1000f };
     
     private const float PerfectWindow = 50f;
@@ -30,8 +30,8 @@ public class NoteManager
     private int _missedNotes = 0;
     private int _combo = 0;
     private int _highestCombo;
-    private int _score;
-    private float _accuracy;
+    private int _score = 0;
+    private double _accuracy = 100f;
 
     public void LoadContent(ContentManager content)
     {
@@ -125,7 +125,7 @@ public class NoteManager
             Note note = _activeNotes[i];
             note.Update(gameTime, songTime, _hitLine);
             
-            if (songTime > note.HitTime + _despawnTime)
+            if (songTime > note.EndTime + _despawnTime)
             {
                 _activeNotes.RemoveAt(i);
             }
@@ -147,6 +147,9 @@ public class NoteManager
         
         foreach (Note note in _activeNotes)
         {
+            if (note.Lane != laneIndex || note.IsHit)
+                continue;
+            
             if (first && !note.IsHit)
             {
                 closestNote = note;
@@ -158,40 +161,115 @@ public class NoteManager
                 closestNote = note;
             }
         }
-
+        
+        if (closestNote == null)
+            return;
         float timeDifference = Math.Abs(closestNote.HitTime - songTime);
         if (timeDifference <= PerfectWindow)
         {
-            closestNote.IsHit = true;
-            _hitNotes++;
-            _combo++;
-            _score += 300 * _combo;
-            _activeNotes.Remove(closestNote);
+            if (closestNote is TapNote tapNote)
+            {
+                closestNote.IsHit = true;
+                _hitNotes++;
+                _combo++;
+                _score += 300 * _combo;
+                _activeNotes.Remove(closestNote);
+            }
+
+            else if (closestNote is HoldNote holdNote)
+            {
+                holdNote.StartHold();
+                _hitNotes++;
+                _combo++;
+                _score += 300 * _combo;
+            }
         }
         else if (timeDifference <= GoodWindow)
         {
-            closestNote.IsHit = true;
-            _hitGoodNotes++;
-            _combo++;
-            _score += 100 * _combo;
-            _activeNotes.Remove(closestNote);
+            if (closestNote is TapNote tapNote)
+            {
+                closestNote.IsHit = true;
+                _hitGoodNotes++;
+                _combo++;
+                _score += 100 * _combo;
+                _activeNotes.Remove(closestNote);
+            }
+            else if (closestNote is HoldNote holdNote)
+            {
+                holdNote.StartHold();
+                _hitGoodNotes++;
+                _combo++;
+                _score += 100 * _combo;
+            }
         }
         else if (timeDifference <= MissWindow)
         {
-            closestNote.IsHit = true;
-            _missedNotes++;
-            _highestCombo = _combo;
-            _combo = 0;
-            _activeNotes.Remove(closestNote);
+            if (closestNote is TapNote tapNote || closestNote is HoldNote holdNote)
+            {
+                closestNote.IsHit = true;
+                _missedNotes++;
+                _highestCombo = _combo;
+                _combo = 0;
+                _activeNotes.Remove(closestNote);
+            }
         }
-        
         
         UpdateAccuracy();
     }
+    
+    public void CheckRelease(float songTime, int laneIndex)
+    {
+        foreach (Note note in _activeNotes)
+        {
+            if (note is HoldNote hold && hold.Lane == laneIndex && hold.IsBeingHeld)
+            {
+
+                float timeDifference = Math.Abs(songTime - hold.EndTime);
+                
+                if (songTime < hold.EndTime - MissWindow)
+                {
+                    _missedNotes++;
+                    _highestCombo = _combo;
+                    _combo = 0;
+
+                    hold.Release();
+                    _activeNotes.Remove(hold);
+                    break;
+                }
+
+                if (timeDifference <= PerfectWindow)
+                {
+                    _hitNotes++;
+                    _combo++;
+                    _score += 300 * _combo;
+                }
+                else if (timeDifference <= GoodWindow)
+                {
+                    _hitGoodNotes++;
+                    _combo++;
+                    _score += 100 * _combo;
+                }
+                else
+                {
+                    _missedNotes++;
+                    _highestCombo = _combo;
+                    _combo = 0;
+                }
+
+                hold.Release();
+                hold.Complete();
+                _activeNotes.Remove(hold);
+                break;
+            }
+        }
+
+        UpdateAccuracy();
+    }
+
 
     private void UpdateAccuracy()
     {
         int allNotes = _hitNotes + _hitGoodNotes + _missedNotes;
-        
+        _accuracy =  (300.0 * _hitNotes + 100.0 * _hitGoodNotes) / (300.0 * allNotes);
     }
 }

@@ -10,8 +10,10 @@ public abstract class Note
     public int Lane { get; protected set; }
     public bool IsHit;  
 
-    private readonly float _speed = 10f;
+    private readonly float _speed = 1f;
     private float _distanceFromHitline;
+    
+    public virtual float EndTime => HitTime;
 
     public Note(float HitTime, int lane, float x)
     {

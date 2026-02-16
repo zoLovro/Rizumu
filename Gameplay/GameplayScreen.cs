@@ -48,11 +48,12 @@ public class GameplayScreen : Game
         // Map loading
         _noteManager = new NoteManager();
         _noteManager.LoadContent(Content);
-        _noteManager.LoadMap("C:\\Users\\lovro\\Desktop\\Projects\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\King_Gnu-AIZO_(TV_Size)_(keksikosu)_[EASY].txt");
+        _noteManager.LoadMap("C:\\Users\\lovro\\Desktop\\Projects\\C#\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\King_Gnu-AIZO_(TV_Size)_(keksikosu)_[EASY].txt");
         
         // Music
-        _music = SoundEffect.FromFile("C:\\Users\\lovro\\Desktop\\Projects\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\audio.wav");
+        _music = SoundEffect.FromFile("C:\\Users\\lovro\\Desktop\\Projects\\C#\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\audio.wav");
         _musicInstance = _music.CreateInstance();
+        _musicInstance.Volume = 0.1f;
         // TODO: use this.Content to load your game content here
     }
 
@@ -95,6 +96,24 @@ public class GameplayScreen : Game
         if (current.IsKeyDown(Keys.K) && _previousKeyboard.IsKeyUp(Keys.K))
         {
             _noteManager.CheckHit(_songTime, 3);
+        }
+        
+        // Release logic
+        if (current.IsKeyUp(Keys.D) && _previousKeyboard.IsKeyDown(Keys.D))
+        {
+            _noteManager.CheckRelease(_songTime, 0);
+        }
+        if (current.IsKeyUp(Keys.F) && _previousKeyboard.IsKeyDown(Keys.F))
+        {
+            _noteManager.CheckRelease(_songTime, 1);
+        }
+        if (current.IsKeyUp(Keys.J) && _previousKeyboard.IsKeyDown(Keys.J))
+        {
+            _noteManager.CheckRelease(_songTime, 2);
+        }
+        if (current.IsKeyUp(Keys.K) && _previousKeyboard.IsKeyDown(Keys.K))
+        {
+            _noteManager.CheckRelease(_songTime, 3);
         }
         
         _previousKeyboard = current;
