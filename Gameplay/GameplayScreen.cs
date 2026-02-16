@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Transactions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -16,6 +17,8 @@ public class GameplayScreen : Game
     private double _startTime;
     private bool _started = false;
     private float _songTime = 0f;
+    private Texture2D _rectangle;
+    private KeyboardState _previousKeyboard;
 
     public GameplayScreen()
     {
@@ -39,6 +42,8 @@ public class GameplayScreen : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+        _rectangle = new Texture2D(GraphicsDevice,1, 1);
         
         // Map loading
         _noteManager = new NoteManager();
@@ -56,6 +61,8 @@ public class GameplayScreen : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
+        
+        KeyboardState current = Keyboard.GetState();
 
         // TODO: Add your update logic here
         
@@ -72,6 +79,25 @@ public class GameplayScreen : Game
         _noteManager.SpawnNotes(_songTime);
         _noteManager.UpdateActiveNotes(_songTime, gameTime);
         
+        // Hit logic
+        if (current.IsKeyDown(Keys.D) && _previousKeyboard.IsKeyUp(Keys.D))
+        {
+            _noteManager.CheckHit(_songTime, 0);
+        }
+        if (current.IsKeyDown(Keys.F) && _previousKeyboard.IsKeyUp(Keys.F))
+        {
+            _noteManager.CheckHit(_songTime, 1);
+        }
+        if (current.IsKeyDown(Keys.J) && _previousKeyboard.IsKeyUp(Keys.J))
+        {
+            _noteManager.CheckHit(_songTime, 2);
+        }
+        if (current.IsKeyDown(Keys.K) && _previousKeyboard.IsKeyUp(Keys.K))
+        {
+            _noteManager.CheckHit(_songTime, 3);
+        }
+        
+        _previousKeyboard = current;
         base.Update(gameTime);
     }
 
@@ -84,6 +110,10 @@ public class GameplayScreen : Game
         _spriteBatch.Begin();
         
         _noteManager.Draw(_spriteBatch);
+        
+        // Hitline
+        Rectangle hitLine = new Rectangle(50, 0, 1080, 30);
+        _spriteBatch.Draw(_rectangle, hitLine, Color.White);
 
         _spriteBatch.End();
         base.Draw(gameTime);

@@ -8,7 +8,7 @@ public abstract class Note
     public float HitTime { get; protected set; }
     public Vector2 Position { get; protected set; }
     public int Lane { get; protected set; }
-    public bool IsHit { get; protected set; }   
+    public bool IsHit;  
 
     private readonly float _speed = 10f;
     private float _distanceFromHitline;

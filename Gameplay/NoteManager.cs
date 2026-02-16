@@ -21,6 +21,17 @@ public class NoteManager
     private readonly int _spawnWindow = 1000;
     private readonly int _despawnTime = 100;
     private readonly float[] _laneX = { 100f, 400f, 700f, 1000f };
+    
+    private const float PerfectWindow = 50f;
+    private const float GoodWindow = 100f;
+    private const float MissWindow = 150f;
+    private int _hitNotes = 0;
+    private int _hitGoodNotes = 0;
+    private int _missedNotes = 0;
+    private int _combo = 0;
+    private int _highestCombo;
+    private int _score;
+    private float _accuracy;
 
     public void LoadContent(ContentManager content)
     {
@@ -129,4 +140,58 @@ public class NoteManager
         }
     }
 
+    public void CheckHit(float songTime, int laneIndex)
+    {
+        Note closestNote = null;
+        bool first = true;
+        
+        foreach (Note note in _activeNotes)
+        {
+            if (first && !note.IsHit)
+            {
+                closestNote = note;
+                first = false;
+                continue;
+            }
+            if (note.HitTime < closestNote.HitTime && !note.IsHit)
+            {
+                closestNote = note;
+            }
+        }
+
+        float timeDifference = Math.Abs(closestNote.HitTime - songTime);
+        if (timeDifference <= PerfectWindow)
+        {
+            closestNote.IsHit = true;
+            _hitNotes++;
+            _combo++;
+            _score += 300 * _combo;
+            _activeNotes.Remove(closestNote);
+        }
+        else if (timeDifference <= GoodWindow)
+        {
+            closestNote.IsHit = true;
+            _hitGoodNotes++;
+            _combo++;
+            _score += 100 * _combo;
+            _activeNotes.Remove(closestNote);
+        }
+        else if (timeDifference <= MissWindow)
+        {
+            closestNote.IsHit = true;
+            _missedNotes++;
+            _highestCombo = _combo;
+            _combo = 0;
+            _activeNotes.Remove(closestNote);
+        }
+        
+        
+        UpdateAccuracy();
+    }
+
+    private void UpdateAccuracy()
+    {
+        int allNotes = _hitNotes + _hitGoodNotes + _missedNotes;
+        
+    }
 }
