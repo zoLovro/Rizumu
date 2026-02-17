@@ -20,6 +20,9 @@ public class GameplayScreen : Game
     private float _songTime = 0f;
     private Texture2D _rectangle;
     private KeyboardState _previousKeyboard;
+    private bool _paused = false;
+    private double _pauseStart;
+    private double _totalPausedTime = 0;
 
     public GameplayScreen()
     {
@@ -35,7 +38,6 @@ public class GameplayScreen : Game
 
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
 
         base.Initialize();
     }
@@ -56,82 +58,108 @@ public class GameplayScreen : Game
         _music = SoundEffect.FromFile("C:\\Users\\lovro\\Desktop\\Projects\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\audio.wav");
         _musicInstance = _music.CreateInstance();
         _musicInstance.Volume = 0.1f;
-        // TODO: use this.Content to load your game content here
     }
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-            Keyboard.GetState().IsKeyDown(Keys.Escape))
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
             Exit();
-        
+
         KeyboardState current = Keyboard.GetState();
-        
         if (!_started)
         {
             _musicInstance.Play();
             _startTime = gameTime.TotalGameTime.TotalMilliseconds;
             _started = true;
         }
+        
+        // Pausing
+        if (current.IsKeyDown(Keys.Escape) && _previousKeyboard.IsKeyUp(Keys.Escape))
+        {
+            _paused = !_paused;
 
-        _songTime = (float) gameTime.TotalGameTime.TotalMilliseconds - (float) _startTime;
-        
-        // spawning notes
-        _noteManager.SpawnNotes(_songTime);
-        _noteManager.UpdateActiveNotes(_songTime, gameTime);
-        
-        // Hit logic
-        if (current.IsKeyDown(Keys.D) && _previousKeyboard.IsKeyUp(Keys.D))
-        {
-            _noteManager.CheckHit(_songTime, 0);
+            if (_paused)
+            {
+                _musicInstance.Pause();
+                _pauseStart = gameTime.TotalGameTime.TotalMilliseconds;
+            }
+            else
+            {
+                _musicInstance.Resume();
+                _totalPausedTime += gameTime.TotalGameTime.TotalMilliseconds - _pauseStart;
+            }
         }
-        if (current.IsKeyDown(Keys.F) && _previousKeyboard.IsKeyUp(Keys.F))
+
+        _songTime = (float)(
+            gameTime.TotalGameTime.TotalMilliseconds
+            - _startTime
+            - _totalPausedTime
+        );
+
+        if (!_paused)
         {
-            _noteManager.CheckHit(_songTime, 1);
+            // spawning notes
+            _noteManager.SpawnNotes(_songTime);
+            _noteManager.UpdateActiveNotes(_songTime, gameTime);
+
+            // Hit logic
+            if (current.IsKeyDown(Keys.D) && _previousKeyboard.IsKeyUp(Keys.D))
+            {
+                _noteManager.CheckHit(_songTime, 0);
+            }
+
+            if (current.IsKeyDown(Keys.F) && _previousKeyboard.IsKeyUp(Keys.F))
+            {
+                _noteManager.CheckHit(_songTime, 1);
+            }
+
+            if (current.IsKeyDown(Keys.J) && _previousKeyboard.IsKeyUp(Keys.J))
+            {
+                _noteManager.CheckHit(_songTime, 2);
+            }
+
+            if (current.IsKeyDown(Keys.K) && _previousKeyboard.IsKeyUp(Keys.K))
+            {
+                _noteManager.CheckHit(_songTime, 3);
+            }
+
+            // Release logic
+            if (current.IsKeyUp(Keys.D) && _previousKeyboard.IsKeyDown(Keys.D))
+            {
+                _noteManager.CheckRelease(_songTime, 0);
+            }
+
+            if (current.IsKeyUp(Keys.F) && _previousKeyboard.IsKeyDown(Keys.F))
+            {
+                _noteManager.CheckRelease(_songTime, 1);
+            }
+
+            if (current.IsKeyUp(Keys.J) && _previousKeyboard.IsKeyDown(Keys.J))
+            {
+                _noteManager.CheckRelease(_songTime, 2);
+            }
+
+            if (current.IsKeyUp(Keys.K) && _previousKeyboard.IsKeyDown(Keys.K))
+            {
+                _noteManager.CheckRelease(_songTime, 3);
+            }
         }
-        if (current.IsKeyDown(Keys.J) && _previousKeyboard.IsKeyUp(Keys.J))
-        {
-            _noteManager.CheckHit(_songTime, 2);
-        }
-        if (current.IsKeyDown(Keys.K) && _previousKeyboard.IsKeyUp(Keys.K))
-        {
-            _noteManager.CheckHit(_songTime, 3);
-        }
-        
-        // Release logic
-        if (current.IsKeyUp(Keys.D) && _previousKeyboard.IsKeyDown(Keys.D))
-        {
-            _noteManager.CheckRelease(_songTime, 0);
-        }
-        if (current.IsKeyUp(Keys.F) && _previousKeyboard.IsKeyDown(Keys.F))
-        {
-            _noteManager.CheckRelease(_songTime, 1);
-        }
-        if (current.IsKeyUp(Keys.J) && _previousKeyboard.IsKeyDown(Keys.J))
-        {
-            _noteManager.CheckRelease(_songTime, 2);
-        }
-        if (current.IsKeyUp(Keys.K) && _previousKeyboard.IsKeyDown(Keys.K))
-        {
-            _noteManager.CheckRelease(_songTime, 3);
-        }
-        
+
         _previousKeyboard = current;
+    
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.Black);
-
-        // TODO: Add your drawing code here
         
         _spriteBatch.Begin();
         
         _noteManager.Draw(_spriteBatch);
         
         // Hitline
-        Rectangle hitLine = new Rectangle(100, 100, 1080, 5);
+        Rectangle hitLine = new Rectangle(-10, 100, 2000, 5);
         _spriteBatch.Draw(_rectangle, hitLine, Color.White);
 
         _spriteBatch.End();
