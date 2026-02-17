@@ -16,10 +16,10 @@ public class NoteManager
     private Texture2D _tapTexture;
     private List<Note> _activeNotes = new List<Note>();
     public Queue<NoteData> noteQueue = new Queue<NoteData>();
-    public float ScrollSpeed = 100f;
-    private readonly int _hitLine = 50;
-    private readonly int _spawnWindow = 5000;
-    private readonly int _despawnTime = 6000;
+    public float ScrollSpeed = 2f;
+    private readonly int _hitLine = 100;
+    private readonly int _spawnWindow = 1000;
+    private readonly int _despawnTime = 500;
     private readonly float[] _laneX = { 100f, 400f, 700f, 1000f };
     
     private const float PerfectWindow = 50f;
@@ -123,7 +123,7 @@ public class NoteManager
         for (int i = _activeNotes.Count - 1; i >= 0; i--)
         {
             Note note = _activeNotes[i];
-            note.Update(gameTime, songTime, _hitLine);
+            note.Update(gameTime, songTime, _hitLine, ScrollSpeed);
             
             if (songTime > note.EndTime + _despawnTime)
             {
@@ -178,6 +178,7 @@ public class NoteManager
 
             else if (closestNote is HoldNote holdNote)
             {
+                Console.WriteLine("Hit");
                 holdNote.StartHold();
                 _hitNotes++;
                 _combo++;
@@ -196,6 +197,7 @@ public class NoteManager
             }
             else if (closestNote is HoldNote holdNote)
             {
+                Console.WriteLine("Hit");
                 holdNote.StartHold();
                 _hitGoodNotes++;
                 _combo++;
@@ -204,6 +206,7 @@ public class NoteManager
         }
         else if (timeDifference <= MissWindow)
         {
+            Console.WriteLine("Miss");
             if (closestNote is TapNote tapNote || closestNote is HoldNote holdNote)
             {
                 closestNote.IsHit = true;

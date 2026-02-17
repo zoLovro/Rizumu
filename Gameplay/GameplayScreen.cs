@@ -1,4 +1,5 @@
-﻿using System.Transactions;
+﻿using System;
+using System.Transactions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -44,14 +45,15 @@ public class GameplayScreen : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         _rectangle = new Texture2D(GraphicsDevice,1, 1);
+        _rectangle.SetData(new[] { Color.White });
         
         // Map loading
         _noteManager = new NoteManager();
         _noteManager.LoadContent(Content);
-        _noteManager.LoadMap("C:\\Users\\lovro\\Desktop\\Projects\\C#\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\King_Gnu-AIZO_(TV_Size)_(keksikosu)_[EASY].txt");
+        _noteManager.LoadMap("C:\\Users\\lovro\\Desktop\\Projects\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\King_Gnu-AIZO_(TV_Size)_(keksikosu)_[EASY].txt");
         
         // Music
-        _music = SoundEffect.FromFile("C:\\Users\\lovro\\Desktop\\Projects\\C#\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\audio.wav");
+        _music = SoundEffect.FromFile("C:\\Users\\lovro\\Desktop\\Projects\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\audio.wav");
         _musicInstance = _music.CreateInstance();
         _musicInstance.Volume = 0.1f;
         // TODO: use this.Content to load your game content here
@@ -64,8 +66,6 @@ public class GameplayScreen : Game
             Exit();
         
         KeyboardState current = Keyboard.GetState();
-
-        // TODO: Add your update logic here
         
         if (!_started)
         {
@@ -131,7 +131,7 @@ public class GameplayScreen : Game
         _noteManager.Draw(_spriteBatch);
         
         // Hitline
-        Rectangle hitLine = new Rectangle(50, 0, 1080, 30);
+        Rectangle hitLine = new Rectangle(100, 100, 1080, 5);
         _spriteBatch.Draw(_rectangle, hitLine, Color.White);
 
         _spriteBatch.End();

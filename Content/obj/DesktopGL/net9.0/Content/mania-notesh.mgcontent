@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-notesh.png</SourceFile>
-  <SourceTime>2026-01-22T23:04:30.7298307+01:00</SourceTime>
-  <DestFile>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/Content/mania-notesh.xnb</DestFile>
-  <DestTime>2026-02-16T18:00:36.3623472+01:00</DestTime>
+  <SourceFile>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-notesh.png</SourceFile>
+  <SourceTime>2026-01-24T16:15:38.0977253+01:00</SourceTime>
+  <DestFile>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/Content/mania-notesh.xnb</DestFile>
+  <DestTime>2026-02-17T10:28:02.9672077+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2025-10-20T16:25:32+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

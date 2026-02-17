@@ -9,8 +9,7 @@ public abstract class Note
     public Vector2 Position { get; protected set; }
     public int Lane { get; protected set; }
     public bool IsHit;  
-
-    private readonly float _speed = 1f;
+    
     private float _distanceFromHitline;
     
     public virtual float EndTime => HitTime;
@@ -24,12 +23,10 @@ public abstract class Note
         Position = new Vector2(x, 100);
     }
 
-    public virtual void Update(GameTime gameTime, float songTime, int hitLine)
+    public virtual void Update(GameTime gameTime, float songTime, int hitLine, float scrollSpeed)
     {
-        _distanceFromHitline = (HitTime - songTime) * _speed;
-        Vector2 tempPosition = Position;
-        tempPosition.Y = hitLine + _distanceFromHitline;
-        Position = tempPosition;
+        _distanceFromHitline = (HitTime - songTime) * scrollSpeed;
+        Position = new Vector2(Position.X, hitLine + _distanceFromHitline);
     }
 
     public abstract void Draw(SpriteBatch spriteBatch);
