@@ -18,7 +18,7 @@ public class NoteManager
     public Queue<NoteData> noteQueue = new Queue<NoteData>();
     public float ScrollSpeed = 2f;
     private readonly int _hitLine = 100;
-    private readonly int _spawnWindow = 1000;
+    private readonly int _spawnWindow = 4000;
     private readonly int _despawnTime = 500;
     private readonly float[] _laneX = { 578.5f, 770.5f, 962.5f, 1154.5f };
     
@@ -32,6 +32,9 @@ public class NoteManager
     private int _highestCombo;
     private int _score = 0;
     private double _accuracy = 100f;
+    
+    public double Accuracy => _accuracy;
+    public int Score => _score;
 
     public void LoadContent(ContentManager content)
     {

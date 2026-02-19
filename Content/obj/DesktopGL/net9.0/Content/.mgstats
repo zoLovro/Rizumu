@@ -1,10 +1,1 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note1.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/Content/mania-note1.xnb","TextureProcessor","Texture2DContent",3055,111701,0.0819135
-"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note1h.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/Content/mania-note1h.xnb","TextureProcessor","Texture2DContent",3055,111701,0.0038625
-"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note1l.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/Content/mania-note1l.xnb","TextureProcessor","Texture2DContent",3055,111701,0.004624
-"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note2.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/Content/mania-note2.xnb","TextureProcessor","Texture2DContent",3051,111701,0.0024505
-"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note2H.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/Content/mania-note2H.xnb","TextureProcessor","Texture2DContent",3051,111701,0.0028226
-"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note2L.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/Content/mania-note2L.xnb","TextureProcessor","Texture2DContent",3051,111701,0.0021366
-"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-notes.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/Content/mania-notes.xnb","TextureProcessor","Texture2DContent",3055,111701,0.0024391
-"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-notesh.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/Content/mania-notesh.xnb","TextureProcessor","Texture2DContent",3055,111701,0.0034643
-"C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-notesl.png","C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/Content/mania-notesl.xnb","TextureProcessor","Texture2DContent",3055,111701,0.0022789

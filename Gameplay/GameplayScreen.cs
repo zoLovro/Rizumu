@@ -23,7 +23,8 @@ public class GameplayScreen : Game
     private bool _paused = false;
     private double _pauseStart;
     private double _totalPausedTime = 0;
-
+    private SpriteFont _font;
+    
     public GameplayScreen()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -48,14 +49,15 @@ public class GameplayScreen : Game
 
         _rectangle = new Texture2D(GraphicsDevice,1, 1);
         _rectangle.SetData(new[] { Color.White });
+        _font = Content.Load<SpriteFont>("GameFont");
         
         // Map loading
         _noteManager = new NoteManager();
         _noteManager.LoadContent(Content);
-        _noteManager.LoadMap("C:\\Users\\lovro\\Desktop\\Projects\\C#\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\King_Gnu-AIZO_(TV_Size)_(keksikosu)_[EASY].txt");
+        _noteManager.LoadMap("C:\\Users\\lovro\\Desktop\\Projects\\BetterRyn\\Assets\\Songs\\1911190 Leah Kate - 10 Things I Hate About You (Sped Up & Cut Ver.)\\Leah Kate - 10 Things I Hate About You (Sped Up & Cut Ver.) (Kibitz) [Ihram's Easy].txt");
         
         // Music
-        _music = SoundEffect.FromFile("C:\\Users\\lovro\\Desktop\\Projects\\C#\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\audio.wav");
+        _music = SoundEffect.FromFile("C:\\Users\\lovro\\Desktop\\Projects\\BetterRyn\\Assets\\Songs\\1911190 Leah Kate - 10 Things I Hate About You (Sped Up & Cut Ver.)\\audio.wav");
         _musicInstance = _music.CreateInstance();
         _musicInstance.Volume = 0.1f;
     }
@@ -88,6 +90,13 @@ public class GameplayScreen : Game
                 _musicInstance.Resume();
                 _totalPausedTime += gameTime.TotalGameTime.TotalMilliseconds - _pauseStart;
             }
+        }
+        if (_paused &&
+            current.IsKeyDown(Keys.R) &&
+            _previousKeyboard.IsKeyUp(Keys.R))
+        {
+            RestartMap();
+            return;
         }
 
         _songTime = (float)(
@@ -158,6 +167,10 @@ public class GameplayScreen : Game
         
         _noteManager.Draw(_spriteBatch);
         
+        // Scoring
+        _spriteBatch.DrawString(_font, (_noteManager.Accuracy * 100 ).ToString("F2"), new Vector2(100, 100), Color.White);
+        _spriteBatch.DrawString(_font, _noteManager.Score.ToString(), new Vector2(100, 200), Color.White);
+        
         // Hitline
         Rectangle hitLine = new Rectangle(576, 100, 768, 5);
         _spriteBatch.Draw(_rectangle, hitLine, Color.White);
@@ -173,8 +186,41 @@ public class GameplayScreen : Game
         _spriteBatch.Draw(_rectangle, line3, Color.White);
         _spriteBatch.Draw(_rectangle, line4, Color.White);
         _spriteBatch.Draw(_rectangle, line5, Color.White);
-
+        
+        // Pause screen
+        if (_paused)
+        {
+            // Dimming
+            Rectangle fullscreen = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            _spriteBatch.Draw(_rectangle, fullscreen, Color.Black * 0.6f);
+            
+            _spriteBatch.DrawString(_font, "PAUSED", new Vector2(900, 200), Color.White);
+        }
+        
         _spriteBatch.End();
         base.Draw(gameTime);
+    }
+
+    private void RestartMap()
+    {
+        // Music
+        _musicInstance.Dispose();
+        _music = SoundEffect.FromFile("C:\\Users\\lovro\\Desktop\\Projects\\BetterRyn\\Assets\\Songs\\1911190 Leah Kate - 10 Things I Hate About You (Sped Up & Cut Ver.)\\audio.wav");
+        _musicInstance = _music.CreateInstance();
+        _musicInstance.Volume = 0.1f;
+        
+        // Map
+        // Map loading
+        _noteManager = new NoteManager();
+        _noteManager.LoadContent(Content);
+        _noteManager.LoadMap("C:\\Users\\lovro\\Desktop\\Projects\\BetterRyn\\Assets\\Songs\\1911190 Leah Kate - 10 Things I Hate About You (Sped Up & Cut Ver.)\\Leah Kate - 10 Things I Hate About You (Sped Up & Cut Ver.) (Kibitz) [Ihram's Easy].txt");
+
+        // Reseting variables
+        _songTime = 0;
+        _started = false;
+        _totalPausedTime = 0;
+        _pauseStart = 0;
+        _previousKeyboard = Keyboard.GetState();
+        _paused = false;
     }
 }

@@ -84,3 +84,4 @@ C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-note
 C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-notes.xnb
 C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-notesh.xnb
 C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-notesl.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\GameFont.xnb
