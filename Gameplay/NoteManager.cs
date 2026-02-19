@@ -20,7 +20,7 @@ public class NoteManager
     private readonly int _hitLine = 100;
     private readonly int _spawnWindow = 1000;
     private readonly int _despawnTime = 500;
-    private readonly float[] _laneX = { 100f, 400f, 700f, 1000f };
+    private readonly float[] _laneX = { 578.5f, 770.5f, 962.5f, 1154.5f };
     
     private const float PerfectWindow = 50f;
     private const float GoodWindow = 100f;
@@ -178,7 +178,6 @@ public class NoteManager
 
             else if (closestNote is HoldNote holdNote)
             {
-                Console.WriteLine("Hit");
                 holdNote.StartHold();
                 _hitNotes++;
                 _combo++;
@@ -197,7 +196,6 @@ public class NoteManager
             }
             else if (closestNote is HoldNote holdNote)
             {
-                Console.WriteLine("Hit");
                 holdNote.StartHold();
                 _hitGoodNotes++;
                 _combo++;
@@ -206,7 +204,6 @@ public class NoteManager
         }
         else if (timeDifference <= MissWindow)
         {
-            Console.WriteLine("Miss");
             if (closestNote is TapNote tapNote || closestNote is HoldNote holdNote)
             {
                 closestNote.IsHit = true;
@@ -217,6 +214,7 @@ public class NoteManager
             }
         }
         
+        Console.WriteLine(_accuracy);
         UpdateAccuracy();
     }
     

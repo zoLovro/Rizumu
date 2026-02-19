@@ -11,6 +11,7 @@ public class HoldNote : Note
 
     private bool _isBeingHeld = false;
     private bool _completed = false;
+    private int _textureWidth = 192;
 
     public override float EndTime => HitTime + _duration;
     public bool IsBeingHeld => _isBeingHeld;
@@ -27,7 +28,7 @@ public class HoldNote : Note
     public override void Draw(SpriteBatch spriteBatch)
     {
         float tailLength = _duration * _scrollSpeed;
-        Rectangle bodyRect = new Rectangle((int)Position.X, (int)Position.Y - (int)tailLength, _holdNoteTexture.Width, (int)tailLength);
+        Rectangle bodyRect = new Rectangle((int)Position.X, (int)Position.Y - (int)tailLength, _textureWidth, (int)tailLength);
         spriteBatch.Draw(_holdNoteTexture, bodyRect, Color.White);
     }
     

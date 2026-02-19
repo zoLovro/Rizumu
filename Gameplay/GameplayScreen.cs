@@ -52,10 +52,10 @@ public class GameplayScreen : Game
         // Map loading
         _noteManager = new NoteManager();
         _noteManager.LoadContent(Content);
-        _noteManager.LoadMap("C:\\Users\\lovro\\Desktop\\Projects\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\King_Gnu-AIZO_(TV_Size)_(keksikosu)_[EASY].txt");
+        _noteManager.LoadMap("C:\\Users\\lovro\\Desktop\\Projects\\C#\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\King_Gnu-AIZO_(TV_Size)_(keksikosu)_[EASY].txt");
         
         // Music
-        _music = SoundEffect.FromFile("C:\\Users\\lovro\\Desktop\\Projects\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\audio.wav");
+        _music = SoundEffect.FromFile("C:\\Users\\lovro\\Desktop\\Projects\\C#\\BetterRyn\\Assets\\2490429_King_Gnu-AIZO_(TV Size)_[no_video]\\audio.wav");
         _musicInstance = _music.CreateInstance();
         _musicInstance.Volume = 0.1f;
     }
@@ -159,8 +159,20 @@ public class GameplayScreen : Game
         _noteManager.Draw(_spriteBatch);
         
         // Hitline
-        Rectangle hitLine = new Rectangle(-10, 100, 2000, 5);
+        Rectangle hitLine = new Rectangle(576, 100, 768, 5);
         _spriteBatch.Draw(_rectangle, hitLine, Color.White);
+        
+        // Vertical lines for notes
+        Rectangle line1 = new Rectangle(576, -10, 5, 2000);
+        Rectangle line2 = new Rectangle(768, -10, 5, 2000);
+        Rectangle line3 = new Rectangle(960, -10, 5, 2000);
+        Rectangle line4 = new Rectangle(1152, -10, 5, 2000);
+        Rectangle line5 = new Rectangle(1344, -10, 5, 2000);
+        _spriteBatch.Draw(_rectangle, line1, Color.White);
+        _spriteBatch.Draw(_rectangle, line2, Color.White);
+        _spriteBatch.Draw(_rectangle, line3, Color.White);
+        _spriteBatch.Draw(_rectangle, line4, Color.White);
+        _spriteBatch.Draw(_rectangle, line5, Color.White);
 
         _spriteBatch.End();
         base.Draw(gameTime);
