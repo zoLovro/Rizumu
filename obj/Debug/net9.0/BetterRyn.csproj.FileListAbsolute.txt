@@ -86,3 +86,5 @@ C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-note
 C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\mania-notesl.xnb
 C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\GameFont.xnb
 C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Diagnostics\ffmpeg.exe
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Diagnostics\ffmpeg.exe
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\GameFont.xnb

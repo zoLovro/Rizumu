@@ -39,6 +39,8 @@ public class GameplayScreen : IScreen
     private bool _key2Pressed;
     private bool _key3Pressed;
     
+    private const float AudioOffsetMs = 120f;
+    
     public GameplayScreen(string mapFilepath, string songFilepath, string backgroundFilepath)
     {
         _mapFilepath = mapFilepath ?? throw new ArgumentNullException(nameof(mapFilepath));
@@ -70,7 +72,7 @@ public class GameplayScreen : IScreen
         // Music
         _music = SoundEffect.FromFile(_songFilepath);
         _musicInstance = _music.CreateInstance();
-        _musicInstance.Volume = 0.5f;
+        _musicInstance.Volume = 0.2f;
     }
 
     public void Update(GameTime gameTime)
@@ -113,14 +115,10 @@ public class GameplayScreen : IScreen
         if (_paused && current.IsKeyDown(Keys.Q) && _previousKeyboard.IsKeyUp(Keys.Q))
         {
             ScreenManager.Instance.ChangeScreen(new SongSelect(
-                MapParser.LoadAllMaps("C:\\Users\\lovro\\Desktop\\Projects\\BetterRyn\\Assets\\Songs")));
+                MapParser.LoadAllMaps("C:\\Users\\lovro\\Desktop\\Projects\\C#\\BetterRyn\\Assets\\Songs")));
         }
 
-        _songTime = (float)(
-            gameTime.TotalGameTime.TotalMilliseconds
-            - _startTime
-            - _totalPausedTime
-        );
+        _songTime = (float)(gameTime.TotalGameTime.TotalMilliseconds - _startTime - _totalPausedTime - AudioOffsetMs);
 
         if (!_paused)
         {
@@ -192,7 +190,6 @@ public class GameplayScreen : IScreen
         Rectangle hitLine = new Rectangle(_graphicsDevice.Viewport.Width/2 - _noteManager.NoteTextureWidth * 2,
             _noteManager.HitLine, hitLineWidth, 5);
         spriteBatch.Draw(_rectangle, hitLine, Color.White);
-        Console.WriteLine(hitLineWidth);
         
         // Vertical lines for notes
         Rectangle line1 = new Rectangle(_graphicsDevice.Viewport.Width/2 - _noteManager.NoteTextureWidth * 2,
@@ -248,7 +245,7 @@ public class GameplayScreen : IScreen
         _musicInstance.Dispose();
         _music = SoundEffect.FromFile(_songFilepath);
         _musicInstance = _music.CreateInstance();
-        _musicInstance.Volume = 0.1f;
+        _musicInstance.Volume = 0.2f;
         
         // Map
         // Map loading

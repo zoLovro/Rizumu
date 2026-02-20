@@ -27,7 +27,7 @@ public class RynGame : Game
 
         // Start with song select screen
         ScreenManager.Instance.ChangeScreen(new SongSelect(
-            MapParser.LoadAllMaps("C:\\Users\\lovro\\Desktop\\Projects\\BetterRyn\\Assets\\Songs")));
+            MapParser.LoadAllMaps("C:\\Users\\lovro\\Desktop\\Projects\\C#\\BetterRyn\\Assets\\Songs")));
     }
 
     protected override void Update(GameTime gameTime)

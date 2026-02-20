@@ -19,7 +19,7 @@ public class NoteManager
     public float ScrollSpeed = 2f;
     private readonly int _hitLine = 100;
     private readonly int _spawnWindow = 4000;
-    private readonly int _despawnTime = 500;
+    private readonly int _despawnTime = 4000;
     private readonly float[] _laneX = { 578.5f, 770.5f, 962.5f, 1154.5f };
     
     private const float PerfectWindow = 100f;
@@ -62,7 +62,6 @@ public class NoteManager
             if (parts[0].Trim() == "PreviewTime") map.PreviewTime = float.Parse(parts[1].Trim());
             if (parts[0].Trim() == "Title") map.Title = parts[1].Trim();
             if (parts[0].Trim() == "Artist") map.Artist = parts[1].Trim();
-             // if (parts[0].Trim() == "")
             }
 
             if (line.Trim() == "[HitObjects]")
@@ -131,14 +130,26 @@ public class NoteManager
             Note note = _activeNotes[i];
             note.Update(gameTime, songTime, _hitLine, ScrollSpeed);
             
+            if (note is HoldNote hold && hold.IsBeingHeld)
+            {
+                if (songTime >= hold.EndTime)
+                {
+                    hold.Release();
+                    hold.Complete();
+                    _activeNotes.RemoveAt(i);
+                    continue;
+                }
+            }
+            
             if (!note.IsHit && songTime >= note.EndTime + _despawnTime)
             {
                 _missedNotes++;
                 _highestCombo = _combo;
                 _combo = 0;
-                _activeNotes.Remove(note);
+                _activeNotes.RemoveAt(i);
             }
         }
+
         UpdateAccuracy();
     }
 
@@ -152,41 +163,40 @@ public class NoteManager
 
     public void CheckHit(float songTime, int laneIndex)
     {
-        Note closestNote = null;
-        bool first = true;
-        
-        foreach (Note note in _activeNotes)
-        {
-            if (note.Lane != laneIndex || note.IsHit)
-                continue;
-            
-            if (first && !note.IsHit)
-            {
-                closestNote = note;
-                first = false;
-                continue;
-            }
-            if (note.HitTime < closestNote.HitTime && !note.IsHit)
-            {
-                closestNote = note;
-            }
-        }
-        
-        if (closestNote == null)
-            return;
-        float timeDifference = Math.Abs(closestNote.HitTime - songTime);
-        if (timeDifference <= PerfectWindow)
-        {
-            if (closestNote is TapNote tapNote)
-            {
-                closestNote.IsHit = true;
-                _hitNotes++;
-                _combo++;
-                _score += 300 * _combo;
-                _activeNotes.Remove(closestNote);
-            }
+        Note best = null;
+        float bestAbs = float.MaxValue;
 
-            else if (closestNote is HoldNote holdNote)
+        foreach (var note in _activeNotes)
+        {
+            if (note.IsHit) continue;
+            if (note.Lane != laneIndex) continue;
+
+            float dt = songTime - note.HitTime; 
+            float abs = Math.Abs(dt);
+            
+            if (abs > MissWindow) continue;
+
+            if (abs < bestAbs)
+            {
+                bestAbs = abs;
+                best = note;
+            }
+        }
+
+        if (best == null) return;
+
+        if (bestAbs <= PerfectWindow)
+        {
+            if (best is TapNote)
+            {
+                Console.WriteLine("PERFECT");
+                best.IsHit = true;
+                _hitNotes++;
+                _combo++;
+                _score += 300 * _combo;
+                _activeNotes.Remove(best);
+            }
+            else if (best is HoldNote holdNote)
             {
                 holdNote.StartHold();
                 _hitNotes++;
@@ -194,17 +204,18 @@ public class NoteManager
                 _score += 300 * _combo;
             }
         }
-        else if (timeDifference <= GoodWindow)
+        else if (bestAbs <= GoodWindow)
         {
-            if (closestNote is TapNote tapNote)
+            if (best is TapNote)
             {
-                closestNote.IsHit = true;
+                Console.WriteLine("GOOD");
+                best.IsHit = true;
                 _hitGoodNotes++;
                 _combo++;
                 _score += 100 * _combo;
-                _activeNotes.Remove(closestNote);
+                _activeNotes.Remove(best);
             }
-            else if (closestNote is HoldNote holdNote)
+            else if (best is HoldNote holdNote)
             {
                 holdNote.StartHold();
                 _hitGoodNotes++;
@@ -212,64 +223,42 @@ public class NoteManager
                 _score += 100 * _combo;
             }
         }
-        else if (timeDifference <= MissWindow)
+        else 
         {
-            if (closestNote is TapNote tapNote || closestNote is HoldNote holdNote)
-            {
-                closestNote.IsHit = true;
-                _missedNotes++;
-                _highestCombo = _combo;
-                _combo = 0;
-                _activeNotes.Remove(closestNote);
-            }
+            best.IsHit = true;
+            _missedNotes++;
+            _highestCombo = _combo;
+            _combo = 0;
+            _activeNotes.Remove(best);
         }
-        
-        Console.WriteLine(_accuracy);
+
         UpdateAccuracy();
     }
-    
+
     public void CheckRelease(float songTime, int laneIndex)
     {
-        foreach (Note note in _activeNotes)
+        for (int i = _activeNotes.Count - 1; i >= 0; i--)
         {
-            if (note is HoldNote hold && hold.Lane == laneIndex && hold.IsBeingHeld)
+            if (_activeNotes[i] is HoldNote hold &&
+                hold.Lane == laneIndex &&
+                hold.IsBeingHeld)
             {
-
-                float timeDifference = Math.Abs(songTime - hold.EndTime);
-                
-                if (songTime < hold.EndTime - MissWindow)
+                if (songTime < hold.EndTime)
                 {
                     _missedNotes++;
                     _highestCombo = _combo;
                     _combo = 0;
 
                     hold.Release();
-                    _activeNotes.Remove(hold);
-                    break;
-                }
-
-                if (timeDifference <= PerfectWindow)
-                {
-                    _hitNotes++;
-                    _combo++;
-                    _score += 300 * _combo;
-                }
-                else if (timeDifference <= GoodWindow)
-                {
-                    _hitGoodNotes++;
-                    _combo++;
-                    _score += 100 * _combo;
+                    _activeNotes.RemoveAt(i);
                 }
                 else
                 {
-                    _missedNotes++;
-                    _highestCombo = _combo;
-                    _combo = 0;
+                    hold.Release();
+                    hold.Complete();
+                    _activeNotes.RemoveAt(i);
                 }
 
-                hold.Release();
-                hold.Complete();
-                _activeNotes.Remove(hold);
                 break;
             }
         }
@@ -281,6 +270,7 @@ public class NoteManager
     private void UpdateAccuracy()
     {
         int allNotes = _hitNotes + _hitGoodNotes + _missedNotes;
-        _accuracy =  (300.0 * _hitNotes + 100.0 * _hitGoodNotes) / (300.0 * allNotes);
+        if (allNotes == 0) { _accuracy = 1.0; return; } // 100%
+        _accuracy = (300.0 * _hitNotes + 100.0 * _hitGoodNotes) / (300.0 * allNotes);
     }
 }

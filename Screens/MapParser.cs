@@ -16,50 +16,65 @@ public static class MapParser
         foreach (var folder in Directory.GetDirectories(mapsDir))
         {
             string mapFile = Directory.GetFiles(folder, "*.osu").FirstOrDefault();
-            string audioFile = Directory.GetFiles(folder, "audio.wav").FirstOrDefault();
-            if (audioFile == null)
-            {
-                string alternativeAudioFile = Directory.GetFiles(folder)
-                    .FirstOrDefault(f =>
-                        f.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase)
-                        || f.EndsWith(".ogg", StringComparison.OrdinalIgnoreCase));
-
-                if (alternativeAudioFile != null)
-                {
-                    string outputPath = Path.Combine(folder, "audio.wav");
-                    ConvertAudio.ConvertAudioToWav(alternativeAudioFile, outputPath);
-                    audioFile = outputPath;
-                }
-            }
+            if (mapFile == null) continue;
+            
+            string[] meta = GetMetadata(mapFile);
+            string title = meta[0];
+            string artist = meta[1];
+            string version = meta[2];
+            string audioName = meta[3];
+            
             string backgroundFile = Directory.GetFiles(folder).FirstOrDefault(f =>
-                f.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
-                || f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase));
-
-            if (mapFile != null && audioFile != null && backgroundFile != null)
+                f.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase));
+            
+            string audioFile = Path.Combine(folder, "audio.wav");
+            if (!File.Exists(audioFile))
             {
-                string[] otherMetadata = GetMetadata(mapFile);
-                mapList.Add(new MapMetadata
+                string sourceAudio = null;
+
+                if (!string.IsNullOrWhiteSpace(audioName))
                 {
-                    Artist = otherMetadata[1],
-                    SongTitle = otherMetadata[0],
-                    MapPath = mapFile,
-                    AudioPath = audioFile,
-                    BackgroundPath = backgroundFile,
-                    Difficulty = otherMetadata[2],
-                    BPM = 1
-                });
+                    string wanted = Path.Combine(folder, audioName);
+                    if (File.Exists(wanted))
+                        sourceAudio = wanted;
+                }
+                
+                if (sourceAudio == null)
+                {
+                    sourceAudio = Directory.GetFiles(folder).FirstOrDefault(f =>
+                        f.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase) ||
+                        f.EndsWith(".ogg", StringComparison.OrdinalIgnoreCase) ||
+                        f.EndsWith(".wav", StringComparison.OrdinalIgnoreCase));
+                }
+
+                if (sourceAudio != null)
+                    ConvertAudio.ConvertAudioToWav(sourceAudio, audioFile);
             }
+
+            if (!File.Exists(audioFile)) continue;
+            if (backgroundFile == null) continue;
+
+            mapList.Add(new MapMetadata
+            {
+                Artist = artist,
+                SongTitle = title,
+                MapPath = mapFile,
+                AudioPath = audioFile,
+                BackgroundPath = backgroundFile,
+                Difficulty = version,
+                BPM = 1
+            });
         }
         return mapList;
     }
 
     static string[] GetMetadata(string filepath)
     {
-        string[] metadata = new string[3];
+        string[] metadata = new string[4];
         if (File.Exists(filepath))
         {
             string[] lines = File.ReadAllLines(filepath);
-            string[] temp;
             foreach (var line in lines)
             {
                 var parts = line.Split(':', 2);
@@ -77,6 +92,9 @@ public static class MapParser
                         break;
                     case "Version":
                         metadata[2] = value;
+                        break;
+                    case "AudioFilename":
+                        metadata[3] = value;
                         break;
                 }
             }

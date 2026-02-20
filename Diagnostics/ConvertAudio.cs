@@ -9,17 +9,17 @@ public static class ConvertAudio
 {
     public static void ConvertAudioToWav(string inputSongPath, string outputWavPath)
     {
-        Process process = new Process();
-        
+        var process = new Process();
         process.StartInfo.FileName = Path.Combine(AppContext.BaseDirectory, "Diagnostics", "ffmpeg.exe");
-    
-        // overwrite (-y), input file (-i), output file
-        process.StartInfo.Arguments = $"-y -i \"{inputSongPath}\" \"{outputWavPath}\""; 
-        
+
+        // Force stable WAV
+        process.StartInfo.Arguments =
+            $"-y -i \"{inputSongPath}\" -vn -ac 2 -ar 44100 -c:a pcm_s16le \"{outputWavPath}\"";
+
         process.StartInfo.UseShellExecute = false;
         process.StartInfo.CreateNoWindow = true;
-        
+
         process.Start();
-        process.WaitForExit(); 
+        process.WaitForExit();
     }
 }

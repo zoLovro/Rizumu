@@ -11,6 +11,7 @@ public abstract class Note
     public bool IsHit;  
     
     private float _distanceFromHitline;
+    protected virtual float HitAnchorOffsetY => 0f;
     
     public virtual float EndTime => HitTime;
 
@@ -26,7 +27,11 @@ public abstract class Note
     public virtual void Update(GameTime gameTime, float songTime, int hitLine, float scrollSpeed)
     {
         _distanceFromHitline = (HitTime - songTime) * scrollSpeed;
-        Position = new Vector2(Position.X, hitLine + _distanceFromHitline);
+
+        const float tapHeight = 82f;               
+        float anchorOffset = tapHeight / 2f;
+
+        Position = new Vector2(Position.X, hitLine - HitAnchorOffsetY + _distanceFromHitline);
     }
 
     public abstract void Draw(SpriteBatch spriteBatch);

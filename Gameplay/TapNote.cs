@@ -27,4 +27,6 @@ public class TapNote : Note
 
         spriteBatch.Draw(_tapNoteTexture, destination, Color.White);
     }
+    
+    protected override float HitAnchorOffsetY => 82f / 2f;
 }
