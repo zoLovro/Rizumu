@@ -1,11 +1,2 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"C:/Users/lovro/Desktop/Projects/BetterRyn/Content/GameFont.spritefont","C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/GameFont.xnb","LocalizedFontProcessor","SpriteFontContent",2497,932,6,576742
-"C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note1.png","C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/mania-note1.xnb","TextureProcessor","Texture2DContent",3055,111701,0,0347386
-"C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note1h.png","C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/mania-note1h.xnb","TextureProcessor","Texture2DContent",3055,111701,0,0056248
-"C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note1l.png","C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/mania-note1l.xnb","TextureProcessor","Texture2DContent",3055,111701,0,0080132
-"C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note2.png","C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/mania-note2.xnb","TextureProcessor","Texture2DContent",3051,111701,0,0063974
-"C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note2H.png","C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/mania-note2H.xnb","TextureProcessor","Texture2DContent",3051,111701,0,0059698
-"C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note2L.png","C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/mania-note2L.xnb","TextureProcessor","Texture2DContent",3051,111701,0,0050602
-"C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-notes.png","C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/mania-notes.xnb","TextureProcessor","Texture2DContent",3055,111701,0,0063701
-"C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-notesh.png","C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/mania-notesh.xnb","TextureProcessor","Texture2DContent",3055,111701,0,0080366
-"C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-notesl.png","C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/mania-notesl.xnb","TextureProcessor","Texture2DContent",3055,111701,0,0060323
+"C:/Users/lovro/Desktop/Projects/BetterRyn/Content/GameFont.spritefont","C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/GameFont.xnb","FontDescriptionProcessor","SpriteFontContent",499,70682,0,2358196

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SourceFile>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/GameFont.spritefont</SourceFile>
-  <SourceTime>2025-10-20T15:59:04+02:00</SourceTime>
+  <SourceTime>2026-02-19T17:38:12.3155436+01:00</SourceTime>
   <DestFile>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/GameFont.xnb</DestFile>
-  <DestTime>2026-02-19T15:48:21.8752114+01:00</DestTime>
+  <DestTime>2026-02-20T09:39:13.8696049+01:00</DestTime>
   <Importer>FontDescriptionImporter</Importer>
   <ImporterTime>2025-10-20T16:25:32+02:00</ImporterTime>
-  <Processor>LocalizedFontProcessor</Processor>
+  <Processor>FontDescriptionProcessor</Processor>
   <ProcessorTime>2025-10-20T16:25:32+02:00</ProcessorTime>
   <Parameters>
     <Key>PremultiplyAlpha</Key>

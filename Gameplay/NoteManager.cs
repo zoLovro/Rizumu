@@ -22,9 +22,9 @@ public class NoteManager
     private readonly int _despawnTime = 500;
     private readonly float[] _laneX = { 578.5f, 770.5f, 962.5f, 1154.5f };
     
-    private const float PerfectWindow = 50f;
-    private const float GoodWindow = 100f;
-    private const float MissWindow = 150f;
+    private const float PerfectWindow = 100f;
+    private const float GoodWindow = 150f;
+    private const float MissWindow = 200f;
     private int _hitNotes = 0;
     private int _hitGoodNotes = 0;
     private int _missedNotes = 0;
@@ -32,9 +32,12 @@ public class NoteManager
     private int _highestCombo;
     private int _score = 0;
     private double _accuracy = 100f;
+    private int _noteTextureWidth = 192;
     
     public double Accuracy => _accuracy;
     public int Score => _score;
+    public int NoteTextureWidth => _noteTextureWidth;
+    public int HitLine => _hitLine;
 
     public void LoadContent(ContentManager content)
     {
@@ -128,11 +131,15 @@ public class NoteManager
             Note note = _activeNotes[i];
             note.Update(gameTime, songTime, _hitLine, ScrollSpeed);
             
-            if (songTime > note.EndTime + _despawnTime)
+            if (!note.IsHit && songTime >= note.EndTime + _despawnTime)
             {
-                _activeNotes.RemoveAt(i);
+                _missedNotes++;
+                _highestCombo = _combo;
+                _combo = 0;
+                _activeNotes.Remove(note);
             }
         }
+        UpdateAccuracy();
     }
 
     public void Draw(SpriteBatch spriteBatch)

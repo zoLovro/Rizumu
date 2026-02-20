@@ -1,2 +1,2 @@
-﻿using var game = new BetterRyn.Gameplay.GameplayScreen();
+﻿using var game = new BetterRyn.Screens.RynGame();
 game.Run();
