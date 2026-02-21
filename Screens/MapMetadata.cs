@@ -7,6 +7,8 @@ public class MapMetadata
     public string MapPath { get; set; }
     public string AudioPath { get; set; }
     public string BackgroundPath { get; set; }
-    public string Difficulty { get; set; }
+    public string DifficultyName { get; set; }
+    public float DifficultyRating { get; set; }
     public float BPM { get; set; }
+    public string Folder { get; set; }
 }
