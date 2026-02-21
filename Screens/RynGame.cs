@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.IO;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace BetterRyn.Screens;
@@ -25,9 +27,13 @@ public class RynGame : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        // Start with song select screen
+        string songsPath = Path.Combine(
+            AppContext.BaseDirectory,
+            "Assets",
+            "Songs"
+        );
         ScreenManager.Instance.ChangeScreen(new SongSelect(
-            MapParser.LoadAllMaps("C:\\Users\\lovro\\Desktop\\Projects\\C#\\BetterRyn\\Assets\\Songs")));
+            MapParser.LoadAllMaps(songsPath)));
     }
 
     protected override void Update(GameTime gameTime)

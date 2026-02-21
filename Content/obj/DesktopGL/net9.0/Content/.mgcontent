@@ -4,16 +4,16 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/GameFont.spritefont</File>
-    <File>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note1.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note1h.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note1l.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note2.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note2H.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-note2L.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-notes.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-notesh.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/mania-notesl.png</File>
+    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/GameFont.spritefont</File>
+    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note1.png</File>
+    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note1h.png</File>
+    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note1l.png</File>
+    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note2.png</File>
+    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note2H.png</File>
+    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note2L.png</File>
+    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-notes.png</File>
+    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-notesh.png</File>
+    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-notesl.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

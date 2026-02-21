@@ -114,8 +114,13 @@ public class GameplayScreen : IScreen
         
         if (_paused && current.IsKeyDown(Keys.Q) && _previousKeyboard.IsKeyUp(Keys.Q))
         {
+            string songsPath = Path.Combine(
+                AppContext.BaseDirectory,
+                "Assets",
+                "Songs"
+            );
             ScreenManager.Instance.ChangeScreen(new SongSelect(
-                MapParser.LoadAllMaps("C:\\Users\\lovro\\Desktop\\Projects\\C#\\BetterRyn\\Assets\\Songs")));
+                MapParser.LoadAllMaps(songsPath)));
         }
 
         _songTime = (float)(gameTime.TotalGameTime.TotalMilliseconds - _startTime - _totalPausedTime - AudioOffsetMs);
