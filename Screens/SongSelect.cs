@@ -145,6 +145,11 @@ public class SongSelect : IScreen
         }
     }
 
+    public void Dispose()
+    {
+        
+    }
+
     private enum SelectState
     {
         SongList,

@@ -40,6 +40,10 @@ public class GameplayScreen : IScreen
     private bool _key3Pressed;
     
     private const float AudioOffsetMs = 120f;
+
+    public string MapFilepath => _mapFilepath;
+    public string SongFilepath => _songFilepath;
+    public string BackgroundFilepath => _backgroundFilepath;
     
     public GameplayScreen(string mapFilepath, string songFilepath, string backgroundFilepath)
     {
@@ -174,6 +178,13 @@ public class GameplayScreen : IScreen
             }
         }
 
+        
+        // Ending the map
+        if (_noteManager.NoteQueue.Count == 0 && _noteManager.ActiveNotes.Count == 0)
+        {
+            Dispose();
+            ScreenManager.Instance.ChangeScreen(new ResultScreen(this, _noteManager));
+        }
         _previousKeyboard = current;
     }
 
@@ -188,6 +199,7 @@ public class GameplayScreen : IScreen
         // Scoring
         spriteBatch.DrawString(_font, (_noteManager.Accuracy * 100 ).ToString("F2"), new Vector2(100, 100), Color.White);
         spriteBatch.DrawString(_font, _noteManager.Score.ToString(), new Vector2(100, 200), Color.White);
+        spriteBatch.DrawString(_font, _noteManager.Combo.ToString(), new Vector2(100, _graphicsDevice.Viewport.Height - 100), Color.White);
         
         // Hitline
         int hitLineWidth = (_graphicsDevice.Viewport.Width / 2 + _noteManager.NoteTextureWidth * 2) -
@@ -265,5 +277,13 @@ public class GameplayScreen : IScreen
         _pauseStart = 0;
         _previousKeyboard = Keyboard.GetState();
         _paused = false;
+    }
+    
+    public void Dispose()
+    {
+        if (_musicInstance.State == SoundState.Playing)
+        {
+            _musicInstance.Stop();
+        }
     }
 }

@@ -14,9 +14,9 @@ namespace BetterRyn.Gameplay;
 public class NoteManager
 {
     private Texture2D _tapTexture;
-    private List<Note> _activeNotes = new List<Note>();
-    public Queue<NoteData> noteQueue = new Queue<NoteData>();
-    public float ScrollSpeed = 2f;
+    private readonly List<Note> _activeNotes = new List<Note>();
+    private readonly Queue<NoteData> _noteQueue = new Queue<NoteData>();
+    private float _scrollSpeed = 2f;
     private readonly int _hitLine = 100;
     private readonly int _spawnWindow = 4000;
     private readonly int _despawnTime = 4000;
@@ -32,12 +32,16 @@ public class NoteManager
     private int _highestCombo;
     private int _score = 0;
     private double _accuracy = 100f;
-    private int _noteTextureWidth = 192;
+    private readonly int _noteTextureWidth = 192;
     
     public double Accuracy => _accuracy;
     public int Score => _score;
     public int NoteTextureWidth => _noteTextureWidth;
     public int HitLine => _hitLine;
+    public int Combo => _combo;
+    public int HighestCombo => _highestCombo;
+    public List<Note> ActiveNotes => _activeNotes;
+    public Queue<NoteData> NoteQueue => _noteQueue;
 
     public void LoadContent(ContentManager content)
     {
@@ -94,11 +98,11 @@ public class NoteManager
                 switch (parts[3].Trim())
                 {
                     case "1":
-                        noteQueue.Enqueue(new NoteData { Time = time, Lane = lane, Type = NoteType.Tap});
+                        _noteQueue.Enqueue(new NoteData { Time = time, Lane = lane, Type = NoteType.Tap});
                         break;
                     case "128": 
                         float endTime = float.Parse(parts[5].Split(':')[0]);
-                        noteQueue.Enqueue(new NoteData { Time = time, Lane = lane, Duration = endTime - time, Type = NoteType.Hold});
+                        _noteQueue.Enqueue(new NoteData { Time = time, Lane = lane, Duration = endTime - time, Type = NoteType.Hold});
                         break;
                 }
             }
@@ -107,17 +111,17 @@ public class NoteManager
 
     public void SpawnNotes(float songTime)
     {
-        while (noteQueue.Count > 0 && noteQueue.Peek().Time - songTime <= _spawnWindow)
+        while (_noteQueue.Count > 0 && _noteQueue.Peek().Time - songTime <= _spawnWindow)
         {
-            NoteData nextNote = noteQueue.Dequeue();
+            NoteData nextNote = _noteQueue.Dequeue();
             float xPos = _laneX[nextNote.Lane];
             switch (nextNote.Type)
             {
                 case NoteType.Tap:
-                    _activeNotes.Add(new TapNote(nextNote.Time, nextNote.Lane, ScrollSpeed, _tapTexture, xPos));
+                    _activeNotes.Add(new TapNote(nextNote.Time, nextNote.Lane, _scrollSpeed, _tapTexture, xPos));
                     break;
                 case NoteType.Hold:
-                    _activeNotes.Add(new HoldNote(nextNote.Time, nextNote.Duration, nextNote.Lane, ScrollSpeed, _tapTexture, xPos));
+                    _activeNotes.Add(new HoldNote(nextNote.Time, nextNote.Duration, nextNote.Lane, _scrollSpeed, _tapTexture, xPos));
                     break;
             }
         }
@@ -128,7 +132,7 @@ public class NoteManager
         for (int i = _activeNotes.Count - 1; i >= 0; i--)
         {
             Note note = _activeNotes[i];
-            note.Update(gameTime, songTime, _hitLine, ScrollSpeed);
+            note.Update(gameTime, songTime, _hitLine, _scrollSpeed);
             
             if (note is HoldNote hold && hold.IsBeingHeld)
             {

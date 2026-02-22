@@ -88,3 +88,11 @@ C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\GameFont.xnb
 C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Diagnostics\ffmpeg.exe
 C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Diagnostics\ffmpeg.exe
 C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\GameFont.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\ranking-A@2x.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\ranking-B@2x.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\ranking-C@2x.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\ranking-D@2x.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\ranking-S@2x.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\ranking-sh@2x.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\ranking-x@2x.xnb
+C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\ranking-xh@2x.xnb

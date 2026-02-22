@@ -9,4 +9,5 @@ public interface IScreen
     void LoadContent(ContentManager content, GraphicsDevice graphicsDevice);
     void Update(GameTime gameTime);
     void Draw(SpriteBatch spriteBatch);
+    void Dispose();
 }
