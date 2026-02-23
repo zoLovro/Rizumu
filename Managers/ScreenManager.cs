@@ -1,4 +1,6 @@
-﻿namespace BetterRyn.Screens;
+﻿using BetterRyn.Screens;
+
+namespace BetterRyn.Managers;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;

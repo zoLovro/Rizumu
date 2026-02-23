@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace BetterRyn.Screens;
+namespace BetterRyn.Managers;
 
 public class ResultScreenManager
 {

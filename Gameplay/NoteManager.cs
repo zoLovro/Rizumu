@@ -19,7 +19,7 @@ public class NoteManager
     private float _scrollSpeed = 2f;
     private readonly int _hitLine = 100;
     private readonly int _spawnWindow = 4000;
-    private readonly int _despawnTime = 4000;
+    private readonly int _despawnTime = 1500;
     private readonly float[] _laneX = { 578.5f, 770.5f, 962.5f, 1154.5f };
     
     private const float PerfectWindow = 100f;
@@ -42,6 +42,14 @@ public class NoteManager
     public int HighestCombo => _highestCombo;
     public List<Note> ActiveNotes => _activeNotes;
     public Queue<NoteData> NoteQueue => _noteQueue;
+    public int HitNotes => _hitNotes;
+    public int HitGoodNotes => _hitGoodNotes;
+    public int MissedNotes => _missedNotes;
+
+    public event Action OnMiss;
+    public event Action OnHit;
+    public event Action OnGoodHit;
+    
 
     public void LoadContent(ContentManager content)
     {
@@ -148,6 +156,7 @@ public class NoteManager
             if (!note.IsHit && songTime >= note.EndTime + _despawnTime)
             {
                 _missedNotes++;
+                OnMiss?.Invoke();
                 _highestCombo = _combo;
                 _combo = 0;
                 _activeNotes.RemoveAt(i);
@@ -191,6 +200,7 @@ public class NoteManager
 
         if (bestAbs <= PerfectWindow)
         {
+            OnHit?.Invoke();
             if (best is TapNote)
             {
                 Console.WriteLine("PERFECT");
@@ -210,6 +220,7 @@ public class NoteManager
         }
         else if (bestAbs <= GoodWindow)
         {
+            OnGoodHit?.Invoke();
             if (best is TapNote)
             {
                 Console.WriteLine("GOOD");
@@ -229,6 +240,7 @@ public class NoteManager
         }
         else 
         {
+            OnMiss?.Invoke();
             best.IsHit = true;
             _missedNotes++;
             _highestCombo = _combo;

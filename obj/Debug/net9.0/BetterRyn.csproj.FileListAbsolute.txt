@@ -96,3 +96,16 @@ C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\ranking-S@
 C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\ranking-sh@2x.xnb
 C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\ranking-x@2x.xnb
 C:\Users\lovro\Desktop\Projects\C#\BetterRyn\bin\Debug\net9.0\Content\ranking-xh@2x.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\ranking-A@2x.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\ranking-B@2x.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\ranking-C@2x.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\ranking-D@2x.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\ranking-S@2x.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\ranking-sh@2x.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\ranking-x@2x.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\ranking-xh@2x.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\mania-key1D.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\mania-key2D.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\scorebar-bg@2x.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\scorebar-colour@2x.xnb
+C:\Users\lovro\Desktop\Projects\BetterRyn\bin\Debug\net9.0\Content\scorebar-ki.xnb

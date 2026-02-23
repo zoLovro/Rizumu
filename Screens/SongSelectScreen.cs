@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using BetterRyn.Logic;
+using BetterRyn.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -9,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace BetterRyn.Screens;
 
-public class SongSelect : IScreen
+public class SongSelectScreen : IScreen
 {
     private GraphicsDevice _graphicsDevice;
     private SpriteFont _font;
@@ -23,7 +25,7 @@ public class SongSelect : IScreen
     private bool _mapsetIsPicked = false;
     
     
-    public SongSelect(List<MapMetadata> rawDifficulties)
+    public SongSelectScreen(List<MapMetadata> rawDifficulties)
     {
         _mapsets = rawDifficulties.GroupBy(m => m.Folder)
             .Select(group => new MapsetGroup
@@ -112,6 +114,8 @@ public class SongSelect : IScreen
         _previousKeyboard = current;
     }
 
+    /* TODO: Make UI scrollable so the user
+     can see what they are selecting when the maps go off screen */
     public void Draw(SpriteBatch spriteBatch)
     {
         int yOffset = 50; // Starting Y position

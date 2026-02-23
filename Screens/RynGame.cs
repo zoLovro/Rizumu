@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using BetterRyn.Logic;
+using BetterRyn.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -32,7 +34,7 @@ public class RynGame : Game
             "Assets",
             "Songs"
         );
-        ScreenManager.Instance.ChangeScreen(new SongSelect(
+        ScreenManager.Instance.ChangeScreen(new SongSelectScreen(
             MapParser.LoadAllMaps(songsPath)));
     }
 

@@ -1,4 +1,4 @@
-﻿namespace BetterRyn.Screens;
+﻿namespace BetterRyn.Logic;
 using System.Collections.Generic;
 
 public class MapsetGroup

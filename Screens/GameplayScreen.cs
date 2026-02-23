@@ -2,6 +2,8 @@
 using System.IO;
 using System.Transactions;
 using BetterRyn.Gameplay;
+using BetterRyn.Logic;
+using BetterRyn.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -16,6 +18,7 @@ public class GameplayScreen : IScreen
     private GraphicsDevice _graphicsDevice;
     private ContentManager _content;
     private NoteManager _noteManager;
+    private HealthManager _healthManager;
     private SoundEffect _music;
     private SoundEffectInstance _musicInstance;
     private double _startTime;
@@ -24,6 +27,7 @@ public class GameplayScreen : IScreen
     private Texture2D _rectangle;
     private KeyboardState _previousKeyboard;
     private bool _paused = false;
+    private bool _failed = false;
     private double _pauseStart;
     private double _totalPausedTime = 0;
     private SpriteFont _font;
@@ -77,6 +81,12 @@ public class GameplayScreen : IScreen
         _music = SoundEffect.FromFile(_songFilepath);
         _musicInstance = _music.CreateInstance();
         _musicInstance.Volume = 0.2f;
+
+        _healthManager = new HealthManager();
+        _healthManager.LoadContent(_content);
+        _noteManager.OnHit += () => _healthManager.AddHealth(10);
+        _noteManager.OnGoodHit += () => _healthManager.AddHealth(5);
+        _noteManager.OnMiss += () => _healthManager.SubtractHealth(10);
     }
 
     public void Update(GameTime gameTime)
@@ -95,7 +105,7 @@ public class GameplayScreen : IScreen
         }
         
         // Pausing
-        if (current.IsKeyDown(Keys.Escape) && _previousKeyboard.IsKeyUp(Keys.Escape))
+        if (!_healthManager.isDead && current.IsKeyDown(Keys.Escape) && _previousKeyboard.IsKeyUp(Keys.Escape))
         {
             _paused = !_paused;
 
@@ -110,27 +120,35 @@ public class GameplayScreen : IScreen
                 _totalPausedTime += gameTime.TotalGameTime.TotalMilliseconds - _pauseStart;
             }
         }
-        if (_paused && current.IsKeyDown(Keys.R) && _previousKeyboard.IsKeyUp(Keys.R))
+        if ((_paused || _healthManager.isDead) && current.IsKeyDown(Keys.R) && _previousKeyboard.IsKeyUp(Keys.R))
         {
             RestartMap();
             return;
         }
         
-        if (_paused && current.IsKeyDown(Keys.Q) && _previousKeyboard.IsKeyUp(Keys.Q))
+        if ((_paused || _healthManager.isDead) && current.IsKeyDown(Keys.Q) && _previousKeyboard.IsKeyUp(Keys.Q))
         {
             string songsPath = Path.Combine(
                 AppContext.BaseDirectory,
                 "Assets",
                 "Songs"
             );
-            ScreenManager.Instance.ChangeScreen(new SongSelect(
+            ScreenManager.Instance.ChangeScreen(new SongSelectScreen(
                 MapParser.LoadAllMaps(songsPath)));
         }
-
         _songTime = (float)(gameTime.TotalGameTime.TotalMilliseconds - _startTime - _totalPausedTime - AudioOffsetMs);
-
-        if (!_paused)
+        
+        // Death screen
+        if (_healthManager.isDead)
         {
+            _musicInstance.Pause();
+        }
+        
+
+        if (!_paused && !_healthManager.isDead)
+        {
+            _healthManager.HpLossCycle(gameTime);
+            
             // spawning notes
             _noteManager.SpawnNotes(_songTime);
             _noteManager.UpdateActiveNotes(_songTime, gameTime);
@@ -185,6 +203,7 @@ public class GameplayScreen : IScreen
             Dispose();
             ScreenManager.Instance.ChangeScreen(new ResultScreen(this, _noteManager));
         }
+        
         _previousKeyboard = current;
     }
 
@@ -240,15 +259,30 @@ public class GameplayScreen : IScreen
         if(_key2Pressed) spriteBatch.Draw(_rectangle, lane2PressEffect, Color.White * 0.3f);
         if(_key3Pressed) spriteBatch.Draw(_rectangle, lane3PressEffect, Color.White * 0.3f);
         
+        _healthManager.Draw(spriteBatch, new Vector2(50, 50));
+        
         
         // Pause screen
-        if (_paused)
+        if (_paused && !_healthManager.isDead)
         {
             // Dimming
             Rectangle fullscreen = new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
             spriteBatch.Draw(_rectangle, fullscreen, Color.Black * 0.6f);
             
             spriteBatch.DrawString(_font, "PAUSED", new Vector2(900, 200), Color.White);
+            
+            spriteBatch.DrawString(_font, "ESC - Continue", new Vector2(200, 150), Color.White);
+            spriteBatch.DrawString(_font, "Q - Quit to song select", new Vector2(200, 200), Color.White);
+            spriteBatch.DrawString(_font, "R - Restart map", new Vector2(200, 250), Color.White);
+        }
+        
+        if (_healthManager.isDead)
+        {
+            // Dimming
+            Rectangle fullscreen = new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
+            spriteBatch.Draw(_rectangle, fullscreen, Color.Black * 0.6f);
+            
+            spriteBatch.DrawString(_font, "DEAD", new Vector2(900, 200), Color.White);
             
             spriteBatch.DrawString(_font, "Q - Quit to song select", new Vector2(200, 200), Color.White);
             spriteBatch.DrawString(_font, "R - Restart map", new Vector2(200, 250), Color.White);
@@ -264,7 +298,6 @@ public class GameplayScreen : IScreen
         _musicInstance = _music.CreateInstance();
         _musicInstance.Volume = 0.2f;
         
-        // Map
         // Map loading
         _noteManager = new NoteManager();
         _noteManager.LoadContent(_content);
@@ -277,6 +310,13 @@ public class GameplayScreen : IScreen
         _pauseStart = 0;
         _previousKeyboard = Keyboard.GetState();
         _paused = false;
+        
+        // HealthManager initialization
+        _healthManager = new HealthManager();
+        _healthManager.LoadContent(_content);
+        _noteManager.OnHit += () => _healthManager.AddHealth(10);
+        _noteManager.OnGoodHit += () => _healthManager.AddHealth(5);
+        _noteManager.OnMiss += () => _healthManager.SubtractHealth(10);
     }
     
     public void Dispose()

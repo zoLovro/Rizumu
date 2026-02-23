@@ -1,4 +1,4 @@
-﻿namespace BetterRyn.Screens;
+﻿namespace BetterRyn.Logic;
 
 public class MapMetadata
 {

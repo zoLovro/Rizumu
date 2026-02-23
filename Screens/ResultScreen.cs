@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using BetterRyn.Gameplay;
+using BetterRyn.Logic;
+using BetterRyn.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -51,7 +53,7 @@ public class ResultScreen : IScreen
                 "Assets",
                 "Songs"
             );
-            ScreenManager.Instance.ChangeScreen(new SongSelect(
+            ScreenManager.Instance.ChangeScreen(new SongSelectScreen(
                 MapParser.LoadAllMaps(songsPath)));
         }
 
@@ -65,14 +67,15 @@ public class ResultScreen : IScreen
     }
 
     public void Draw(SpriteBatch spriteBatch)
-    {
-        // TODO: Show the ammount of 300, 100 and misses
-        
+    { 
         spriteBatch.Draw(_rankAchieved, new Vector2(_screenWidth - 700, _screenHeight - 1000), Color.White);
-        spriteBatch.DrawString(_font, _noteManager.HighestCombo.ToString(), new Vector2(150, _screenHeight - 150), Color.White);
         
-        //TODO: Format accuracy to 2 digits
-        spriteBatch.DrawString(_font, (_noteManager.Accuracy * 100).ToString(), new Vector2(400, _screenHeight - 150), Color.White);
+        spriteBatch.DrawString(_font, _noteManager.HitNotes.ToString(), new Vector2(150, 200), Color.White);
+        spriteBatch.DrawString(_font, _noteManager.HitGoodNotes.ToString(), new Vector2(150, 300), Color.White);
+        spriteBatch.DrawString(_font, _noteManager.MissedNotes.ToString(), new Vector2(150, 400), Color.White);
+        
+        spriteBatch.DrawString(_font, _noteManager.HighestCombo.ToString(), new Vector2(150, _screenHeight - 350), Color.White);
+        spriteBatch.DrawString(_font, (_noteManager.Accuracy * 100).ToString("F2") + "%", new Vector2(400, _screenHeight - 350), Color.White);
     }
     
     public void Dispose()

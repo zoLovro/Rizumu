@@ -1,6 +1,6 @@
 ﻿namespace BetterRyn.Screens;
 
-public class SettingsMenu
+public class SettingsScreen
 {
     
 }

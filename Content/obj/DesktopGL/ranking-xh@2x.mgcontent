@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/ranking-xh@2x.png</SourceFile>
-  <SourceTime>2026-01-22T23:04:31.1819738+01:00</SourceTime>
-  <DestFile>C:/Users/lovro/Desktop/Projects/C#/BetterRyn/Content/bin/DesktopGL/ranking-xh@2x.xnb</DestFile>
-  <DestTime>2026-02-22T21:44:16.2884605+01:00</DestTime>
+  <SourceFile>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/ranking-xh@2x.png</SourceFile>
+  <SourceTime>2026-02-23T08:23:26.6602569+01:00</SourceTime>
+  <DestFile>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/bin/DesktopGL/ranking-xh@2x.xnb</DestFile>
+  <DestTime>2026-02-23T09:39:02.8795706+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2025-10-20T16:25:32+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

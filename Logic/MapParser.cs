@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BetterRyn.Diagnostics;
+using BetterRyn.Logic;
 
-namespace BetterRyn.Screens;
+namespace BetterRyn.Logic;
 
 public static class MapParser
 {
