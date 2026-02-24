@@ -29,13 +29,7 @@ public class RynGame : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        string songsPath = Path.Combine(
-            AppContext.BaseDirectory,
-            "Assets",
-            "Songs"
-        );
-        ScreenManager.Instance.ChangeScreen(new SongSelectScreen(
-            MapParser.LoadAllMaps(songsPath)));
+        ScreenManager.Instance.ChangeScreen(new MainMenuScreen());
     }
 
     protected override void Update(GameTime gameTime)

@@ -75,6 +75,11 @@ public class SongSelectScreen : IScreen
                 _state = SelectState.DifficultyList;
             }
 
+            if (current.IsKeyDown(Keys.Escape) && _previousKeyboard.IsKeyUp(Keys.Escape))
+            {
+                ScreenManager.Instance.ChangeScreen(new MainMenuScreen());
+            }
+
         }
 
         // Diff
@@ -118,7 +123,7 @@ public class SongSelectScreen : IScreen
      can see what they are selecting when the maps go off screen */
     public void Draw(SpriteBatch spriteBatch)
     {
-        int yOffset = 50; // Starting Y position
+        int yOffset = 50;
 
         for (int i = 0; i < _mapsets.Count; i++)
         {
