@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.IO;
+using BetterRyn.Managers;
 
 namespace BetterRyn.Screens;
 
@@ -15,40 +16,25 @@ public class SettingsScreen : IScreen
     private KeyboardState _previousKeyboard;
     private Texture2D _rectangle;
     private SpriteFont _font;
-    private string _appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-    private string _gameFolder;
     private string[] _textFileLines;
     private bool _inSubMenu;
-    
-    private int _offset;
+
+    private string[] _keybinds;
+    private float _offset;
     private string[] _resolution;
-    private string[] _fullscreen;
-    private int _volume;
+    private bool _fullscreen;
+    private float _volume;
+    
+    
+
+    private SettingsScreenManager _settingsScreenManager;
     
 
     public SettingsScreen()
     {
-        _menuItems = new[] { "KEYBINDS", "OFFSET", "RESOLUTION", "FULLSCREEN", "VOLUME", "SAVE", "DISCARD" };
-        _textFileLines = new[]
-        {
-            "keybinds=D, F, J, K",
-            "offset=120",
-            "resolution=1920x1080",
-            "fullscreen=NO",
-            "volume=100"
-        };
-
-        _resolution = new[] { "1280x720", "1360x768", "1600x900", "1920x1080" };
-        _fullscreen = new[] { "ON", "OFF" };
+        _settingsScreenManager = new SettingsScreenManager();
         
-        
-        _currentIndex = 0;
-        _currentSubIndex = 0;
-        
-        _gameFolder = Path.Combine(_appDataPath, "BetterRyn");
-        Directory.CreateDirectory(_gameFolder);
-        string fullFilePath = Path.Combine(_gameFolder, "settings.txt");
-        File.WriteAllLines(fullFilePath, _textFileLines);
+        File.WriteAllLines(_settingsScreenManager.CreateSettingsFileIfExists(), _textFileLines);
     }
     
     public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice)
@@ -57,6 +43,19 @@ public class SettingsScreen : IScreen
         _rectangle.SetData(new[] {Color.White});
         
         _font = content.Load<SpriteFont>("GameFont");
+        
+        _menuItems = _settingsScreenManager.MenuItems;
+        _textFileLines = _settingsScreenManager.TextFileLines;
+
+        _keybinds = _settingsScreenManager.Keybinds;
+        _resolution = _settingsScreenManager.Resolutions;
+        _fullscreen = _settingsScreenManager.Fullscreen;
+        _volume = _settingsScreenManager.Volume;
+        _offset = _settingsScreenManager.Offset;
+        
+        
+        _currentIndex = 0;
+        _currentSubIndex = 0;
     }
 
     public void Update(GameTime gameTime)
@@ -103,17 +102,25 @@ public class SettingsScreen : IScreen
     {
         int yOffset = 500;
 
-        for (int i = 0; i < _menuItems.Length; i++)
+        if (!_inSubMenu)
         {
-            string item = _menuItems[i];
-            
-            if (i == _currentIndex)
+            for (int i = 0; i < _menuItems.Length; i++)
             {
-                spriteBatch.Draw(_rectangle, new Rectangle(40, yOffset, 300, 40), Color.Blue * 0.5f);
+                string item = _menuItems[i];
+
+                if (i == _currentIndex)
+                {
+                    spriteBatch.Draw(_rectangle, new Rectangle(40, yOffset, 300, 40), Color.Blue * 0.5f);
+                }
+
+                spriteBatch.DrawString(_font, item, new Vector2(50, yOffset), Color.White);
+                yOffset += 50;
             }
+        }
+
+        if (_inSubMenu)
+        {
             
-            spriteBatch.DrawString(_font, item, new Vector2(50, yOffset), Color.White);
-            yOffset += 50;
         }
     }
 
@@ -121,4 +128,5 @@ public class SettingsScreen : IScreen
     {
         
     }
+    
 }
