@@ -250,7 +250,8 @@ public class NoteManager
 
         UpdateAccuracy();
     }
-
+    
+    // TODO: Fix the hold notes not registering being held properly
     public void CheckRelease(float songTime, int laneIndex)
     {
         for (int i = _activeNotes.Count - 1; i >= 0; i--)

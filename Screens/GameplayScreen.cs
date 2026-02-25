@@ -147,8 +147,6 @@ public class GameplayScreen : IScreen
 
         if (!_paused && !_healthManager.isDead)
         {
-            _healthManager.HpLossCycle(gameTime);
-            
             // spawning notes
             _noteManager.SpawnNotes(_songTime);
             _noteManager.UpdateActiveNotes(_songTime, gameTime);

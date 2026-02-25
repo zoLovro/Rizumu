@@ -24,13 +24,7 @@ public class HealthManager
         _healthBarTexture = content.Load<Texture2D>("scorebar-colour@2x");
         _healthBarBg = content.Load<Texture2D>("scorebar-bg@2x");
     }
-    
 
-    public void HpLossCycle(GameTime gameTime)
-    {
-        _healthAmount -= 0.05f * (float)gameTime.ElapsedGameTime.TotalMilliseconds / 16f;
-        ClampHealth();
-    }
 
     public void AddHealth(float amount)
     {
