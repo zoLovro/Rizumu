@@ -4,29 +4,29 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/GameFont.spritefont</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-key1D.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-key2D.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note1.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note1h.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note1l.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note2.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note2H.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-note2L.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-notes.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-notesh.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/mania-notesl.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/ranking-A@2x.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/ranking-B@2x.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/ranking-C@2x.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/ranking-D@2x.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/ranking-S@2x.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/ranking-sh@2x.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/ranking-x@2x.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/ranking-xh@2x.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/scorebar-bg@2x.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/scorebar-colour@2x.png</File>
-    <File>C:/Users/lovro/Desktop/Projects/BetterRyn/Content/scorebar-ki.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/GameFont.spritefont</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/mania-key1D.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/mania-key2D.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/mania-note1.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/mania-note1h.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/mania-note1l.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/mania-note2.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/mania-note2H.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/mania-note2L.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/mania-notes.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/mania-notesh.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/mania-notesl.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/ranking-A@2x.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/ranking-B@2x.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/ranking-C@2x.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/ranking-D@2x.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/ranking-S@2x.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/ranking-sh@2x.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/ranking-x@2x.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/ranking-xh@2x.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/scorebar-bg@2x.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/scorebar-colour@2x.png</File>
+    <File>/home/lovrohk/RiderProjects/BetterRyn/Content/scorebar-ki.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

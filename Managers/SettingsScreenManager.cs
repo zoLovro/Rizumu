@@ -40,7 +40,11 @@ public class SettingsScreenManager
     public string CreateSettingsFileIfExists()
     {
         _gameFolder = Path.Combine(_appDataPath, "BetterRyn");
-        Directory.CreateDirectory(_gameFolder);
+        if (!Directory.Exists(_gameFolder))
+        {
+            Directory.CreateDirectory(_gameFolder);
+        }
+    
         return Path.Combine(_gameFolder, "settings.txt");
     }
 

@@ -210,6 +210,8 @@ public class GameplayScreen : IScreen
         if (_backgroundTexture != null)
         {
             spriteBatch.Draw(_backgroundTexture, Vector2.Zero, Color.White);
+            Rectangle fullscreen = new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
+            spriteBatch.Draw(_rectangle, fullscreen, Color.Black * 0.9f);
         }
         _noteManager.Draw(spriteBatch);
         
@@ -265,7 +267,7 @@ public class GameplayScreen : IScreen
         {
             // Dimming
             Rectangle fullscreen = new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
-            spriteBatch.Draw(_rectangle, fullscreen, Color.Black * 0.6f);
+            spriteBatch.Draw(_rectangle, fullscreen, Color.Black * 0.3f);
             
             spriteBatch.DrawString(_font, "PAUSED", new Vector2(900, 200), Color.White);
             
