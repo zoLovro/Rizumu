@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using BetterRyn.Logic;
-using BetterRyn.Managers;
+﻿using BetterRyn.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 

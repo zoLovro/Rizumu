@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Transactions;
 using BetterRyn.Logic;
 using BetterRyn.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
 namespace BetterRyn.Screens;
 
@@ -74,34 +72,29 @@ public class MainMenuScreen : IScreen
                     break;
                 case 3:
                     _askingIfExit = true;
+                    _previousKeyboard = current; // Reasoning: When I tried to break, it remembered the last inputted key and went straight to exiting the game
                     break;
             }
-
-            if (_askingIfExit && current.IsKeyDown(Keys.Right) && _previousKeyboard.IsKeyUp(Keys.Right))
-            { 
+        }
+        
+        if (_askingIfExit)
+        {
+            if (current.IsKeyDown(Keys.Right) && _previousKeyboard.IsKeyUp(Keys.Right))
                 _exitPromptSelectedIndex = (_exitPromptSelectedIndex + 1) % _exitPromptItems.Length;
-            }
-            if (_askingIfExit && current.IsKeyDown(Keys.Left) && _previousKeyboard.IsKeyUp(Keys.Left))
+
+            if (current.IsKeyDown(Keys.Left) && _previousKeyboard.IsKeyUp(Keys.Left))
             {
                 _exitPromptSelectedIndex--;
                 if (_exitPromptSelectedIndex < 0) _exitPromptSelectedIndex = _exitPromptItems.Length - 1;
             }
-            // TODO: It has to prompt before exiting yet it doesn't
-            if (_askingIfExit)
-                if (current.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter))
-                {
-                    {
-                        switch (_exitPromptSelectedIndex)
-                        {
-                            case 0:
-                                RynGame.Instance.Exit();
-                                break;
-                            case 1:
-                                _askingIfExit = false;
-                                break;
-                        }
-                    }
-                }
+
+            if (current.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter))
+            {
+                if (_exitPromptSelectedIndex == 0)
+                    RynGame.Instance.Exit();
+                else
+                    _askingIfExit = false;
+            }
         }
         
         

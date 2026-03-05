@@ -110,9 +110,6 @@ C:/Users/lovro/Desktop/Projects/BetterRyn/bin/Debug/net9.0/Content/scorebar-bg@2
 C:/Users/lovro/Desktop/Projects/BetterRyn/bin/Debug/net9.0/Content/scorebar-colour@2x.xnb
 C:/Users/lovro/Desktop/Projects/BetterRyn/bin/Debug/net9.0/Content/scorebar-ki.xnb
 /home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/mgcb.tool.restore
-/home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/BetterRyn.dll
-/home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/refint/BetterRyn.dll
-/home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/BetterRyn.pdb
 /home/lovrohk/RiderProjects/BetterRyn/bin/Debug/net9.0/Content/GameFont.xnb
 /home/lovrohk/RiderProjects/BetterRyn/bin/Debug/net9.0/Content/mania-key1D.xnb
 /home/lovrohk/RiderProjects/BetterRyn/bin/Debug/net9.0/Content/mania-key2D.xnb
@@ -164,5 +161,8 @@ C:/Users/lovro/Desktop/Projects/BetterRyn/bin/Debug/net9.0/Content/scorebar-ki.x
 /home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/BetterRyn.csproj.CoreCompileInputs.cache
 /home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/BetterRyn.sourcelink.json
 /home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/BetterRyn.csproj.Up2Date
+/home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/BetterRyn.dll
+/home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/refint/BetterRyn.dll
+/home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/BetterRyn.pdb
 /home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/BetterRyn.genruntimeconfig.cache
 /home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/ref/BetterRyn.dll

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace BetterRyn.Gameplay;
+﻿namespace BetterRyn.Gameplay;
 
 public class Beatmap
 {
