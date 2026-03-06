@@ -16,6 +16,7 @@ public class HoldNote : Note
     public override float EndTime => HitTime + _duration;
     public bool IsBeingHeld => _isBeingHeld;
     public bool IsCompleted => _completed;
+    protected override float HitAnchorOffsetY => 82f / 2f;
     
 
     public HoldNote(float time, float duration, int lane, float scrollSpeed, Texture2D texture, float x) : base(time, lane, x)

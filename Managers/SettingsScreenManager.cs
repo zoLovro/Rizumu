@@ -5,8 +5,10 @@ namespace BetterRyn.Managers;
 
 public class SettingsScreenManager
 {
-    private string _appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-    private string _gameFolder;
+    static string _appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+    private string _gameFolder = Path.Combine(_appDataPath, "BetterRyn");
+    
+    public string GameFolder => _gameFolder;
     
     public string[] TextFileLines { get; set; } = new[]
     {
@@ -39,7 +41,6 @@ public class SettingsScreenManager
 
     public string CreateSettingsFileIfExists()
     {
-        _gameFolder = Path.Combine(_appDataPath, "BetterRyn");
         if (!Directory.Exists(_gameFolder))
         {
             Directory.CreateDirectory(_gameFolder);
@@ -47,7 +48,54 @@ public class SettingsScreenManager
     
         return Path.Combine(_gameFolder, "settings.txt");
     }
+    
+    public void ApplySettings(int mainIndex, int subIntex)
+    {
+        switch (mainIndex)
+        {
+            case 0: // KEYBINDS
+                break;
+            case 1: // OFFSET
+                break;
+            case 2: // RESOLUTION
+                break;
+            case 3: // FULLSCREEN
+                break;
+            case 4: // VOLUME
+                break;
+            case 5: // SAVE
+                break;
+            case 6: // DISCARD
+                break;
+        }
+    }
 
+    public void SaveSettings()
+    {
+        
+    }
+    
+
+    public void ChangeKeybind(int index, string keybind)
+    {
+        Keybinds[index] = keybind;
+    }
+    
+    public void ChangeOffset()
+    {
+        
+    }
+
+    public void ChamgeResolution()
+    {
+        
+    }
+
+    public void ToggleFullscreen()
+    {
+        Fullscreen = !Fullscreen;
+    }
+    
     public void ChangeVolume(int num)
     {
         if (num == 1 && Volume < 100f)
@@ -61,9 +109,15 @@ public class SettingsScreenManager
         }
     }
 
-    public void ChangeOffset()
+    public void Save()
     {
         
     }
+
+    public void Discard()
+    {
+        
+    }
+    
     
 }

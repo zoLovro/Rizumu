@@ -27,6 +27,7 @@ public class SettingsScreen : IScreen
 
     private int _savedResolutionIndex;
     private int _savedFullscreenIndex;
+    private bool _isListeningForKey;
 
     private SettingsScreenManager _settingsScreenManager;
     
@@ -36,7 +37,10 @@ public class SettingsScreen : IScreen
         _settingsScreenManager = new SettingsScreenManager();
         
         _textFileLines = _settingsScreenManager.TextFileLines;
-        File.WriteAllLines(_settingsScreenManager.CreateSettingsFileIfExists(), _textFileLines);
+        if(!File.Exists(Path.Combine(_settingsScreenManager.GameFolder, "settings.txt"))) 
+            File.WriteAllLines(_settingsScreenManager.CreateSettingsFileIfExists(), _textFileLines);
+        
+        _settingsScreenManager.LoadContent();
     }
     
     public void LoadContent(ContentManager content, GraphicsDevice graphicsDevice)
@@ -65,6 +69,25 @@ public class SettingsScreen : IScreen
     public void Update(GameTime gameTime)
     { 
         KeyboardState current = Keyboard.GetState();
+
+        if (_isListeningForKey)
+        {
+            foreach (Keys key in current.GetPressedKeys())
+            {
+                if (_previousKeyboard.IsKeyUp(key))
+                {
+                    if (key != Keys.Escape) // Cancel
+                    {
+                        _settingsScreenManager.ChangeKeybind(_currentSubIndex, key.ToString());
+                        _keybinds = _settingsScreenManager.Keybinds;
+                    }
+                    _isListeningForKey = false;
+                    break; 
+                }
+            }
+            _previousKeyboard = current;
+            return;
+        }
 
         // Menu
         if (!_inSubMenu)
@@ -99,6 +122,9 @@ public class SettingsScreen : IScreen
             int maxSubItems = 0;
             switch (_currentIndex)
             {
+                case 0:
+                    maxSubItems = _keybinds.Length;
+                    break;
                 case 2: // RESOLUTION
                     maxSubItems = _resolution.Length;
                     break;
@@ -123,8 +149,15 @@ public class SettingsScreen : IScreen
             
             if (current.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter))
             {
-                ApplySetting(_currentIndex, _currentSubIndex);
-                _inSubMenu = false;
+                if (_currentIndex == 0) 
+                {
+                    _isListeningForKey = true;
+                }
+                else
+                {
+                    _settingsScreenManager.ApplySettings(_currentIndex, _currentSubIndex);
+                    _inSubMenu = false;
+                }
             }
             if (current.IsKeyDown(Keys.Escape) && _previousKeyboard.IsKeyUp(Keys.Escape))
             {
@@ -150,8 +183,18 @@ public class SettingsScreen : IScreen
             spriteBatch.Draw(_rectangle, new Rectangle(40, yOffset, 300, 40), Color.Blue * 0.5f);
         }
         spriteBatch.DrawString(_font, item, new Vector2(50, yOffset), Color.White);
-        
-        if (i == 2) // RESOLUTION
+
+        if (i == 0)
+        {
+            DrawOptionsList(spriteBatch, _keybinds, rightColumnX, yOffset, i, -1);
+            
+            if (_isListeningForKey)
+            {
+                string prompt = $"[Press any key]";
+                spriteBatch.DrawString(_font, prompt, new Vector2(rightColumnX, yOffset - 30), Color.Yellow);
+            }
+        }
+        else if (i == 2) // RESOLUTION
         {
             DrawOptionsList(spriteBatch, _resolution, rightColumnX, yOffset, i, _savedResolutionIndex);
         }
@@ -199,22 +242,6 @@ public class SettingsScreen : IScreen
 
             spriteBatch.DrawString(_font, options[j], new Vector2(currentX, yOffset), textColor);
             currentX += (int)_font.MeasureString(options[j]).X + 30; 
-        }
-    }
-
-    private void ApplySetting(int mainIndex, int subIndex)
-    {
-        if (mainIndex == 2) // RESOLUTION
-        {
-            _savedResolutionIndex = subIndex;
-            Console.WriteLine($"Resolution changed to: {_resolution[subIndex]}");
-            // TODO: add actual resolution change
-        }
-        else if (mainIndex == 3) // FULLSCREEN
-        {
-            _savedFullscreenIndex = subIndex;
-            _fullscreen = (subIndex == 1);
-            Console.WriteLine($"Fullscreen changed to: {_fullscreen}");
         }
     }
 

@@ -115,17 +115,21 @@ public class NoteManager
 
     public void SpawnNotes(float songTime)
     {
-        while (_noteQueue.Count > 0 && _noteQueue.Peek().Time - songTime <= _spawnWindow)
+        while (_noteQueue.Count > 0)
         {
-            NoteData nextNote = _noteQueue.Dequeue();
-            float xPos = _laneX[nextNote.Lane];
-            switch (nextNote.Type)
+            NoteData next = _noteQueue.Peek();
+            float effectiveWindow = _spawnWindow + (next.Type == NoteType.Hold ? next.Duration : 0);
+            if (next.Time - songTime > effectiveWindow) break;
+
+            _noteQueue.Dequeue();
+            float xPos = _laneX[next.Lane];
+            switch (next.Type)
             {
                 case NoteType.Tap:
-                    _activeNotes.Add(new TapNote(nextNote.Time, nextNote.Lane, _scrollSpeed, _tapTexture, xPos));
+                    _activeNotes.Add(new TapNote(next.Time, next.Lane, _scrollSpeed, _tapTexture, xPos));
                     break;
                 case NoteType.Hold:
-                    _activeNotes.Add(new HoldNote(nextNote.Time, nextNote.Duration, nextNote.Lane, _scrollSpeed, _tapTexture, xPos));
+                    _activeNotes.Add(new HoldNote(next.Time, next.Duration, next.Lane, _scrollSpeed, _tapTexture, xPos));
                     break;
             }
         }
@@ -149,7 +153,22 @@ public class NoteManager
                 }
             }
             
-            if (!note.IsHit && songTime >= note.EndTime + _despawnTime)
+            // Head-miss
+            if (!note.IsHit && songTime > note.HitTime + MissWindow)
+            {
+                _missedNotes++;
+                OnMiss?.Invoke();
+                _highestCombo = _combo;
+                _combo = 0;
+                _activeNotes.RemoveAt(i);
+                continue;
+            }
+            
+            float despawnThreshold = note is HoldNote hn
+                ? hn.EndTime + _despawnTime
+                : note.HitTime + _despawnTime;
+
+            if (!note.IsHit && songTime >= despawnThreshold)
             {
                 _missedNotes++;
                 OnMiss?.Invoke();
@@ -209,6 +228,7 @@ public class NoteManager
             else if (best is HoldNote holdNote)
             {
                 holdNote.StartHold();
+                holdNote.IsHit = true;
                 _hitNotes++;
                 _combo++;
                 _score += 300 * _combo;
@@ -229,6 +249,7 @@ public class NoteManager
             else if (best is HoldNote holdNote)
             {
                 holdNote.StartHold();
+                holdNote.IsHit = true;
                 _hitGoodNotes++;
                 _combo++;
                 _score += 100 * _combo;
@@ -247,7 +268,8 @@ public class NoteManager
         UpdateAccuracy();
     }
     
-    // TODO: Fix the hold notes not registering being held properly
+    private const float ReleaseWindow = 150f;
+
     public void CheckRelease(float songTime, int laneIndex)
     {
         for (int i = _activeNotes.Count - 1; i >= 0; i--)
@@ -256,12 +278,13 @@ public class NoteManager
                 hold.Lane == laneIndex &&
                 hold.IsBeingHeld)
             {
-                if (songTime < hold.EndTime)
+                float timeUntilEnd = hold.EndTime - songTime;
+
+                if (timeUntilEnd > ReleaseWindow)
                 {
                     _missedNotes++;
                     _highestCombo = _combo;
                     _combo = 0;
-
                     hold.Release();
                     _activeNotes.RemoveAt(i);
                 }
@@ -271,11 +294,9 @@ public class NoteManager
                     hold.Complete();
                     _activeNotes.RemoveAt(i);
                 }
-
                 break;
             }
         }
-
         UpdateAccuracy();
     }
 

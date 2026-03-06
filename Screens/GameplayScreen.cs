@@ -30,6 +30,8 @@ public class GameplayScreen : IScreen
     private double _totalPausedTime = 0;
     private SpriteFont _font;
     private Texture2D _pressEffect;
+    private const float StartDelayMs = 3000f;
+    private double elapsed;
 
     private string _mapFilepath;
     private string _songFilepath;
@@ -46,6 +48,11 @@ public class GameplayScreen : IScreen
     public string MapFilepath => _mapFilepath;
     public string SongFilepath => _songFilepath;
     public string BackgroundFilepath => _backgroundFilepath;
+
+    private int hitLineWidth;
+    private Rectangle hitLine;
+    private Rectangle fullscreen;
+    private Rectangle noteBackground;
     
     public GameplayScreen(string mapFilepath, string songFilepath, string backgroundFilepath)
     {
@@ -85,6 +92,14 @@ public class GameplayScreen : IScreen
         _noteManager.OnHit += () => _healthManager.AddHealth(10);
         _noteManager.OnGoodHit += () => _healthManager.AddHealth(5);
         _noteManager.OnMiss += () => _healthManager.SubtractHealth(10);
+        
+        // Drawing stuff
+        hitLineWidth = (_graphicsDevice.Viewport.Width / 2 + _noteManager.NoteTextureWidth * 2) -
+                           (_graphicsDevice.Viewport.Width / 2 - _noteManager.NoteTextureWidth * 2);
+        hitLine = new Rectangle(_graphicsDevice.Viewport.Width/2 - _noteManager.NoteTextureWidth * 2,
+            _noteManager.HitLine, hitLineWidth, 5);
+        fullscreen = new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
+        noteBackground = new Rectangle(_graphicsDevice.Viewport.Width/2 - _noteManager.NoteTextureWidth * 2, 0, hitLineWidth, _graphicsDevice.Viewport.Height);
     }
 
     public void Update(GameTime gameTime)
@@ -97,9 +112,17 @@ public class GameplayScreen : IScreen
         
         if (!_started)
         {
-            _musicInstance.Play();
             _startTime = gameTime.TotalGameTime.TotalMilliseconds;
             _started = true;
+        }
+
+        elapsed = gameTime.TotalGameTime.TotalMilliseconds - _startTime;
+        if (_started && !_musicInstance.State.Equals(SoundState.Playing))
+        {
+            if (elapsed >= StartDelayMs)
+            {
+                _musicInstance.Play();
+            }
         }
         
         // Pausing
@@ -134,7 +157,7 @@ public class GameplayScreen : IScreen
             ScreenManager.Instance.ChangeScreen(new SongSelectScreen(
                 MapParser.LoadAllMaps(songsPath)));
         }
-        _songTime = (float)(gameTime.TotalGameTime.TotalMilliseconds - _startTime - _totalPausedTime - AudioOffsetMs);
+        _songTime = (float)(gameTime.TotalGameTime.TotalMilliseconds - _startTime - _totalPausedTime - AudioOffsetMs - StartDelayMs);
         
         // Death screen
         if (_healthManager.isDead)
@@ -208,8 +231,9 @@ public class GameplayScreen : IScreen
         if (_backgroundTexture != null)
         {
             spriteBatch.Draw(_backgroundTexture, Vector2.Zero, Color.White);
-            Rectangle fullscreen = new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height);
-            spriteBatch.Draw(_rectangle, fullscreen, Color.Black * 0.9f);
+            // TODO: Make the brightness adjustable
+            spriteBatch.Draw(_rectangle, fullscreen, Color.Black * 0.1f);
+            spriteBatch.Draw(_rectangle, noteBackground, Color.Black * 0.7f);
         }
         _noteManager.Draw(spriteBatch);
         
@@ -219,10 +243,6 @@ public class GameplayScreen : IScreen
         spriteBatch.DrawString(_font, _noteManager.Combo.ToString(), new Vector2(100, _graphicsDevice.Viewport.Height - 100), Color.White);
         
         // Hitline
-        int hitLineWidth = (_graphicsDevice.Viewport.Width / 2 + _noteManager.NoteTextureWidth * 2) -
-                           (_graphicsDevice.Viewport.Width / 2 - _noteManager.NoteTextureWidth * 2);
-        Rectangle hitLine = new Rectangle(_graphicsDevice.Viewport.Width/2 - _noteManager.NoteTextureWidth * 2,
-            _noteManager.HitLine, hitLineWidth, 5);
         spriteBatch.Draw(_rectangle, hitLine, Color.White);
         
         // Vertical lines for notes
@@ -286,6 +306,11 @@ public class GameplayScreen : IScreen
             spriteBatch.DrawString(_font, "R - Restart map", new Vector2(200, 250), Color.White);
         }
         
+        if (elapsed < StartDelayMs)
+        {
+            int countdown = (int)Math.Ceiling((StartDelayMs - elapsed) / 1000.0);
+            spriteBatch.DrawString(_font, countdown.ToString(), new Vector2(900, 400), Color.White);
+        }
     }
 
     private void RestartMap()
