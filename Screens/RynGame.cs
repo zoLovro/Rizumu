@@ -1,4 +1,5 @@
-﻿using BetterRyn.Managers;
+﻿using System;
+using BetterRyn.Managers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,6 +11,7 @@ public class RynGame : Game
 
     private SpriteBatch _spriteBatch;
     private GraphicsDeviceManager _graphics;
+    private SettingsScreenManager _settingsScreenManager;
 
     public RynGame()
     {
@@ -17,9 +19,11 @@ public class RynGame : Game
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+        _settingsScreenManager = new SettingsScreenManager();
 
-        _graphics.PreferredBackBufferWidth = 1920;
-        _graphics.PreferredBackBufferHeight = 1080;
+        string[] res = SettingsScreenManager.Resolutions[_settingsScreenManager.CurrentResolutionIndex].Split('x');
+        ApplyResolution(int.Parse(res[0]), int.Parse(res[1]));
+        Console.WriteLine(_settingsScreenManager.CurrentResolutionIndex);
     }
 
     protected override void LoadContent()
@@ -40,5 +44,12 @@ public class RynGame : Game
         _spriteBatch.Begin();
         ScreenManager.Instance.Draw(_spriteBatch);
         _spriteBatch.End();
+    }
+    
+    public void ApplyResolution(int width, int height)
+    {
+        _graphics.PreferredBackBufferWidth = width;
+        _graphics.PreferredBackBufferHeight = height;
+        _graphics.ApplyChanges(); 
     }
 }

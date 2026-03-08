@@ -24,9 +24,7 @@ public class SettingsScreen : IScreen
     private string[] _resolution;
     private bool _fullscreen;
     private float _volume;
-
-    private int _savedResolutionIndex;
-    private int _savedFullscreenIndex;
+    
     private bool _isListeningForKey;
 
     private SettingsScreenManager _settingsScreenManager;
@@ -53,17 +51,14 @@ public class SettingsScreen : IScreen
         _menuItems = _settingsScreenManager.MenuItems;
 
         _keybinds = _settingsScreenManager.Keybinds;
-        _resolution = _settingsScreenManager.Resolutions;
         _fullscreen = _settingsScreenManager.Fullscreen;
         _volume = _settingsScreenManager.Volume;
         _offset = _settingsScreenManager.Offset;
+        _resolution = SettingsScreenManager.Resolutions;
         
         
         _currentIndex = 0;
         _currentSubIndex = 0;
-
-        _savedFullscreenIndex = 0;
-        _savedResolutionIndex = 3;
     }
 
     public void Update(GameTime gameTime)
@@ -113,8 +108,22 @@ public class SettingsScreen : IScreen
                 }
                 else
                 {
-                    Console.WriteLine($"Action executed for: {_menuItems[_currentIndex]}");
+                    _settingsScreenManager.ApplySettings(_currentIndex, _currentSubIndex);
+                    if (_currentIndex == 6)  // DISCARD
+                    {
+                        SyncFromManager();
+                        ScreenManager.Instance.ChangeScreen(new MainMenuScreen());
+                    }
+                    else if (_currentIndex == 5) // SAVE
+                    {
+                        ScreenManager.Instance.ChangeScreen(new MainMenuScreen());
+                    }
                 }
+            }
+
+            if (current.IsKeyDown(Keys.Escape) && _previousKeyboard.IsKeyUp(Keys.Escape))
+            {
+                ScreenManager.Instance.ChangeScreen(new MainMenuScreen());
             }
         }
         else
@@ -122,8 +131,15 @@ public class SettingsScreen : IScreen
             int maxSubItems = 0;
             switch (_currentIndex)
             {
-                case 0:
+                case 0: // KEYBINDS
                     maxSubItems = _keybinds.Length;
+                    break;
+                case 1: // OFFSET
+                    if (current.IsKeyDown(Keys.Right) && _previousKeyboard.IsKeyUp(Keys.Right))
+                        _settingsScreenManager.ChangeOffset(1);
+                    if (current.IsKeyDown(Keys.Left) && _previousKeyboard.IsKeyUp(Keys.Left))
+                        _settingsScreenManager.ChangeOffset(0);
+                    _offset = _settingsScreenManager.Offset; 
                     break;
                 case 2: // RESOLUTION
                     maxSubItems = _resolution.Length;
@@ -131,7 +147,13 @@ public class SettingsScreen : IScreen
                 case 3: // FULLSCREEN
                     maxSubItems = 2; 
                     break;
-                // TODO: add other cases for other choices
+                case 4: // VOLUME
+                    if (current.IsKeyDown(Keys.Right) && _previousKeyboard.IsKeyUp(Keys.Right))
+                        _settingsScreenManager.ChangeVolume(1);
+                    if (current.IsKeyDown(Keys.Left) && _previousKeyboard.IsKeyUp(Keys.Left))
+                        _settingsScreenManager.ChangeVolume(0);
+                    _volume = _settingsScreenManager.Volume;
+                    break;
             }
             
             if (maxSubItems > 0)
@@ -149,9 +171,13 @@ public class SettingsScreen : IScreen
             
             if (current.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter))
             {
-                if (_currentIndex == 0) 
+                if (_currentIndex == 0)
                 {
                     _isListeningForKey = true;
+                }
+                else if (_currentIndex == 1 || _currentIndex == 4)
+                {
+                    _inSubMenu = false;
                 }
                 else
                 {
@@ -194,16 +220,27 @@ public class SettingsScreen : IScreen
                 spriteBatch.DrawString(_font, prompt, new Vector2(rightColumnX, yOffset - 30), Color.Yellow);
             }
         }
+        else if (i == 1) // OFFSET
+        {
+            string display = $"< {_settingsScreenManager.Offset}ms >";
+            Color color = (_currentIndex == 1 && _inSubMenu) ? Color.Yellow : Color.White;
+            spriteBatch.DrawString(_font, display, new Vector2(rightColumnX, yOffset), color);
+        }
         else if (i == 2) // RESOLUTION
         {
-            DrawOptionsList(spriteBatch, _resolution, rightColumnX, yOffset, i, _savedResolutionIndex);
+            DrawOptionsList(spriteBatch, _resolution, rightColumnX, yOffset, i, _settingsScreenManager.CurrentResolutionIndex);
         }
         else if (i == 3) // FULLSCREEN
         {
             string[] fullscreenOptions = { "NO", "YES" };
-            DrawOptionsList(spriteBatch, fullscreenOptions, rightColumnX, yOffset, i, _savedFullscreenIndex);
+            DrawOptionsList(spriteBatch, fullscreenOptions, rightColumnX, yOffset, i, _settingsScreenManager.Fullscreen ? 1 : 0);
         }
-        // TODO: add drawing logic for other menu items
+        else if (i == 4)
+        {
+            string display = $"< {_settingsScreenManager.Volume}% >";
+            Color color = (_currentIndex == 4 && _inSubMenu) ? Color.Yellow : Color.White;
+            spriteBatch.DrawString(_font, display, new Vector2(rightColumnX, yOffset), color);
+        }
 
         yOffset += 50;
     }
@@ -238,6 +275,8 @@ public class SettingsScreen : IScreen
                 {
                     textColor = Color.White; 
                 }
+                else if (savedOptionIndex == -1)
+                    textColor = Color.White;
             }
 
             spriteBatch.DrawString(_font, options[j], new Vector2(currentX, yOffset), textColor);
@@ -248,6 +287,14 @@ public class SettingsScreen : IScreen
     public void Dispose()
     {
         
+    }
+    
+    private void SyncFromManager()
+    {
+        _keybinds = _settingsScreenManager.Keybinds;
+        _offset = _settingsScreenManager.Offset;
+        _volume = _settingsScreenManager.Volume;
+        _fullscreen = _settingsScreenManager.Fullscreen;
     }
     
 }
