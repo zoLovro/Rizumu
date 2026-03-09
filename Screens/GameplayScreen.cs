@@ -25,11 +25,9 @@ public class GameplayScreen : IScreen
     private Texture2D _rectangle;
     private KeyboardState _previousKeyboard;
     private bool _paused = false;
-    private bool _failed = false;
     private double _pauseStart;
     private double _totalPausedTime = 0;
     private SpriteFont _font;
-    private Texture2D _pressEffect;
     private const float StartDelayMs = 3000f;
     private double elapsed;
 
@@ -42,8 +40,8 @@ public class GameplayScreen : IScreen
     private bool _key1Pressed;
     private bool _key2Pressed;
     private bool _key3Pressed;
-    
-    private const float AudioOffsetMs = 120f;
+
+    private float AudioOffsetMs;
 
     public string MapFilepath => _mapFilepath;
     public string SongFilepath => _songFilepath;
@@ -53,6 +51,8 @@ public class GameplayScreen : IScreen
     private Rectangle hitLine;
     private Rectangle fullscreen;
     private Rectangle noteBackground;
+
+    private SettingsScreenManager _settingsScreenManager;
     
     public GameplayScreen(string mapFilepath, string songFilepath, string backgroundFilepath)
     {
@@ -66,6 +66,7 @@ public class GameplayScreen : IScreen
         _content = content;
         _graphicsDevice = graphicsDevice;
 
+        _settingsScreenManager = new SettingsScreenManager();
         _rectangle = new Texture2D(_graphicsDevice,1, 1);
         _rectangle.SetData(new[] { Color.White });
         _font = _content.Load<SpriteFont>("GameFont");
@@ -85,7 +86,8 @@ public class GameplayScreen : IScreen
         // Music
         _music = SoundEffect.FromFile(_songFilepath);
         _musicInstance = _music.CreateInstance();
-        _musicInstance.Volume = 0.2f;
+        _musicInstance.Volume = _settingsScreenManager.Volume;
+        AudioOffsetMs = _settingsScreenManager.Offset;
 
         _healthManager = new HealthManager();
         _healthManager.LoadContent(_content);

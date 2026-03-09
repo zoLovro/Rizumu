@@ -8,4 +8,5 @@ public class MapsetGroup
     public string Folder { get; set; }
     public List<MapMetadata> Difficulties { get; set; } = new List<MapMetadata>();
     public bool IsExpanded { get; set; } = false;
+    
 }

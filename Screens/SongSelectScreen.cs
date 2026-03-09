@@ -51,6 +51,8 @@ public class SongSelectScreen : IScreen
         _rectangle.SetData(new[] { Color.White });
 
         _font = content.Load<SpriteFont>("GameFont");
+        
+        LoadBackground();
     }
 
     public void Update(GameTime gameTime)
@@ -64,6 +66,7 @@ public class SongSelectScreen : IScreen
             {
                 _selectedSongIndex = (_selectedSongIndex + 1) % _mapsets.Count;
                 UpdateScrollOffset();
+                LoadBackground();
             }
 
             if (current.IsKeyDown(Keys.Left) && _previousKeyboard.IsKeyUp(Keys.Left))
@@ -71,6 +74,7 @@ public class SongSelectScreen : IScreen
                 _selectedSongIndex--;
                 if (_selectedSongIndex < 0) _selectedSongIndex = _mapsets.Count - 1;
                 UpdateScrollOffset();
+                LoadBackground();
             }
             // Enter for diff selection
             if (current.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter))
@@ -132,6 +136,9 @@ public class SongSelectScreen : IScreen
 
     public void Draw(SpriteBatch spriteBatch)
     {
+        if (_backgroundPreview != null)
+            spriteBatch.Draw(_backgroundPreview, _graphicsDevice.Viewport.Bounds, Color.White * 0.4f);
+
         int screenHeight = _graphicsDevice.Viewport.Height;
         int yOffset = ListStartY - _scrollOffset;
 
@@ -200,9 +207,21 @@ public class SongSelectScreen : IScreen
         _scrollOffset = targetY - screenHeight / 2;
     }
 
+    private void LoadBackground()
+    {
+        _backgroundPreview?.Dispose();
+        _backgroundPreview = null;
+
+        string path = _mapsets[_selectedSongIndex].Difficulties[0].BackgroundPath;
+        if (path == null || !System.IO.File.Exists(path)) return;
+
+        using var stream = System.IO.File.OpenRead(path);
+        _backgroundPreview = Texture2D.FromStream(_graphicsDevice, stream);
+    }
+
     public void Dispose()
     {
-        
+        _backgroundPreview?.Dispose();
     }
 
     private enum SelectState
