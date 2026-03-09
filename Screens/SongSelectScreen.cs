@@ -20,7 +20,10 @@ public class SongSelectScreen : IScreen
     private Texture2D _backgroundPreview;
     private KeyboardState _previousKeyboard;
     private SelectState _state = SelectState.SongList;
-    private bool _mapsetIsPicked = false;
+    private int _scrollOffset = 0;
+    private const int SongRowHeight = 50;
+    private const int DiffRowHeight = 40;
+    private const int ListStartY = 50;
     
     
     public SongSelectScreen(List<MapMetadata> rawDifficulties)
@@ -58,12 +61,16 @@ public class SongSelectScreen : IScreen
         if (_state == SelectState.SongList)
         {
             if (current.IsKeyDown(Keys.Right) && _previousKeyboard.IsKeyUp(Keys.Right))
+            {
                 _selectedSongIndex = (_selectedSongIndex + 1) % _mapsets.Count;
+                UpdateScrollOffset();
+            }
 
             if (current.IsKeyDown(Keys.Left) && _previousKeyboard.IsKeyUp(Keys.Left))
             {
                 _selectedSongIndex--;
                 if (_selectedSongIndex < 0) _selectedSongIndex = _mapsets.Count - 1;
+                UpdateScrollOffset();
             }
             // Enter for diff selection
             if (current.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter))
@@ -71,6 +78,7 @@ public class SongSelectScreen : IScreen
                 _mapsets[_selectedSongIndex].IsExpanded = true;
                 _selectedDifficultyIndex = 0;
                 _state = SelectState.DifficultyList;
+                UpdateScrollOffset();
             }
 
             if (current.IsKeyDown(Keys.Escape) && _previousKeyboard.IsKeyUp(Keys.Escape))
@@ -86,12 +94,16 @@ public class SongSelectScreen : IScreen
             MapsetGroup currentMapset = _mapsets[_selectedSongIndex];
 
             if (current.IsKeyDown(Keys.Down) && _previousKeyboard.IsKeyUp(Keys.Down))
+            {
                 _selectedDifficultyIndex = (_selectedDifficultyIndex + 1) % currentMapset.Difficulties.Count;
+                UpdateScrollOffset();
+            }
             
             if (current.IsKeyDown(Keys.Up) && _previousKeyboard.IsKeyUp(Keys.Up))
             {
                 _selectedDifficultyIndex--;
                 if (_selectedDifficultyIndex < 0) _selectedDifficultyIndex = currentMapset.Difficulties.Count - 1;
+                UpdateScrollOffset();
             }
 
             //
@@ -99,6 +111,7 @@ public class SongSelectScreen : IScreen
             {
                 currentMapset.IsExpanded = false;
                 _state = SelectState.SongList;
+                UpdateScrollOffset();
             }
             
             if (current.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter))
@@ -117,39 +130,74 @@ public class SongSelectScreen : IScreen
         _previousKeyboard = current;
     }
 
-    /* TODO: Make UI scrollable so the user
-     can see what they are selecting when the maps go off screen */
     public void Draw(SpriteBatch spriteBatch)
     {
-        int yOffset = 50;
+        int screenHeight = _graphicsDevice.Viewport.Height;
+        int yOffset = ListStartY - _scrollOffset;
 
         for (int i = 0; i < _mapsets.Count; i++)
         {
             MapsetGroup mapset = _mapsets[i];
-            
-            if (i == _selectedSongIndex && _state == SelectState.SongList)
+
+            if (yOffset + SongRowHeight > 0 && yOffset < screenHeight)
             {
-                spriteBatch.Draw(_rectangle, new Rectangle(40, yOffset, 300, 40), Color.Blue * 0.5f);
+                if (i == _selectedSongIndex && _state == SelectState.SongList)
+                {
+                    spriteBatch.Draw(_rectangle, new Rectangle(40, yOffset, 300, 40), Color.Blue * 0.5f);
+                }
+                spriteBatch.DrawString(_font, $"{mapset.Artist} - {mapset.SongTitle}", new Vector2(50, yOffset), Color.White);
             }
-            spriteBatch.DrawString(_font, $"{mapset.Artist} - {mapset.SongTitle}", new Vector2(50, yOffset), Color.White);
-            yOffset += 50;
-            
+            yOffset += SongRowHeight;
+
             // Diffs
             if (mapset.IsExpanded)
             {
                 for (int j = 0; j < mapset.Difficulties.Count; j++)
                 {
-                    MapMetadata diff = mapset.Difficulties[j];
-                    if (j == _selectedDifficultyIndex && _state == SelectState.DifficultyList)
+                    if (yOffset + DiffRowHeight > 0 && yOffset < screenHeight)
                     {
-                        spriteBatch.Draw(_rectangle, new Rectangle(70, yOffset, 200, 30), Color.DarkRed * 0.5f);
+                        MapMetadata diff = mapset.Difficulties[j];
+                        if (j == _selectedDifficultyIndex && _state == SelectState.DifficultyList)
+                        {
+                            spriteBatch.Draw(_rectangle, new Rectangle(70, yOffset, 200, 30), Color.DarkRed * 0.5f);
+                        }
+                        spriteBatch.DrawString(_font, $"[{diff.DifficultyName}]", new Vector2(80, yOffset), Color.LightGray);
                     }
-                    
-                    spriteBatch.DrawString(_font, $"[{diff.DifficultyName}]", new Vector2(80, yOffset), Color.LightGray);
-                    yOffset += 40;
+                    yOffset += DiffRowHeight;
                 }
             }
         }
+    }
+
+    private void UpdateScrollOffset()
+    {
+        // Calculate Y pos
+        int targetY = ListStartY;
+
+        for (int i = 0; i < _mapsets.Count; i++)
+        {
+            if (_state == SelectState.SongList && i == _selectedSongIndex)
+                break;
+
+            targetY += SongRowHeight;
+
+            if (_mapsets[i].IsExpanded)
+            {
+                int diffCount = _mapsets[i].Difficulties.Count;
+
+                if (_state == SelectState.DifficultyList && i == _selectedSongIndex)
+                {
+                    targetY += _selectedDifficultyIndex * DiffRowHeight;
+                    break;
+                }
+
+                targetY += diffCount * DiffRowHeight;
+            }
+        }
+
+        int screenHeight = _graphicsDevice?.Viewport.Height ?? 720;
+
+        _scrollOffset = targetY - screenHeight / 2;
     }
 
     public void Dispose()

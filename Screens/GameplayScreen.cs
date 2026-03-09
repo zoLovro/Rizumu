@@ -117,7 +117,7 @@ public class GameplayScreen : IScreen
         }
 
         elapsed = gameTime.TotalGameTime.TotalMilliseconds - _startTime;
-        if (_started && !_musicInstance.State.Equals(SoundState.Playing))
+        if (_started && !_musicInstance.State.Equals(SoundState.Playing) && !_paused)
         {
             if (elapsed >= StartDelayMs)
             {
@@ -149,6 +149,7 @@ public class GameplayScreen : IScreen
         
         if ((_paused || _healthManager.isDead) && current.IsKeyDown(Keys.Q) && _previousKeyboard.IsKeyUp(Keys.Q))
         {
+            _musicInstance.Dispose();
             string songsPath = Path.Combine(
                 AppContext.BaseDirectory,
                 "Assets",

@@ -10,9 +10,10 @@ public static class ConvertAudio
     public static void ConvertAudioToWav(string inputSongPath, string outputWavPath)
     {
         var process = new Process();
-        process.StartInfo.FileName = Path.Combine(AppContext.BaseDirectory, "Diagnostics", "ffmpeg.exe");
+        process.StartInfo.FileName = OperatingSystem.IsWindows()
+            ? Path.Combine(AppContext.BaseDirectory, "Diagnostics", "ffmpeg.exe")
+            : "ffmpeg";
 
-        // Force stable WAV
         process.StartInfo.Arguments =
             $"-y -i \"{inputSongPath}\" -vn -ac 2 -ar 44100 -c:a pcm_s16le \"{outputWavPath}\"";
 
