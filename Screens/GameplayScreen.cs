@@ -86,8 +86,8 @@ public class GameplayScreen : IScreen
         // Music
         _music = SoundEffect.FromFile(_songFilepath);
         _musicInstance = _music.CreateInstance();
-        _musicInstance.Volume = _settingsScreenManager.Volume;
-        AudioOffsetMs = _settingsScreenManager.Offset;
+        _musicInstance.Volume = _settingsScreenManager.Volume/100;
+        AudioOffsetMs = _settingsScreenManager.Offset; 
 
         _healthManager = new HealthManager();
         _healthManager.LoadContent(_content);
@@ -322,7 +322,7 @@ public class GameplayScreen : IScreen
         _musicInstance.Dispose();
         _music = SoundEffect.FromFile(_songFilepath);
         _musicInstance = _music.CreateInstance();
-        _musicInstance.Volume = 0.2f;
+        _musicInstance.Volume = _settingsScreenManager.Volume/100;
         
         // Map loading
         _noteManager = new NoteManager();
