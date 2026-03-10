@@ -1,1 +1,19 @@
 ﻿/bin/Debug/net9.0/Diagnostics/ffmpeg.exe
+# Rider
+.idea/
+
+# Build output
+bin/
+obj/
+
+# MonoGame content pipeline output
+**/Content/bin/
+**/Content/obj/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# NuGet (if applicable)
+packages/
+*.user
