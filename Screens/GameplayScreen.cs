@@ -233,7 +233,7 @@ public class GameplayScreen : IScreen
     {
         if (_backgroundTexture != null)
         {
-            spriteBatch.Draw(_backgroundTexture, Vector2.Zero, Color.White);
+            spriteBatch.Draw(_backgroundTexture, _graphicsDevice.Viewport.Bounds, Color.White);
             // TODO: Make the brightness adjustable
             spriteBatch.Draw(_rectangle, fullscreen, Color.Black * 0.1f);
             spriteBatch.Draw(_rectangle, noteBackground, Color.Black * 0.7f);
