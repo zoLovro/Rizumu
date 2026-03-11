@@ -37,7 +37,7 @@ public class SettingsScreenManager
     
     public SettingsScreenManager()
     {
-        
+        Directory.CreateDirectory(_gameFolder);
     }
 
     public void LoadContent()
@@ -127,11 +127,13 @@ public class SettingsScreenManager
 
     public void Save()
     {
-        // Guard against -1 from Discard() if the saved resolution wasn't in our list
-        if (CurrentResolutionIndex < 0 || CurrentResolutionIndex >= Resolutions.Length)
-            CurrentResolutionIndex = 3; // fallback: 1920x1080
+        if (!Directory.Exists(_gameFolder))
+            Directory.CreateDirectory(_gameFolder);
 
-        string[] lines = new[]
+        if (CurrentResolutionIndex < 0 || CurrentResolutionIndex >= Resolutions.Length)
+            CurrentResolutionIndex = 3;
+
+        string[] lines =
         {
             $"keybinds={string.Join(", ", Keybinds)}",
             $"offset={Offset.ToString(CultureInfo.InvariantCulture)}",
@@ -139,6 +141,7 @@ public class SettingsScreenManager
             $"fullscreen={(Fullscreen ? "YES" : "NO")}",
             $"volume={Volume.ToString(CultureInfo.InvariantCulture)}"
         };
+
         File.WriteAllLines(Path.Combine(_gameFolder, "settings.txt"), lines);
 
         string[] res = Resolutions[CurrentResolutionIndex].Split('x');

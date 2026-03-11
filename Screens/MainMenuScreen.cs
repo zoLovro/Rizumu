@@ -62,7 +62,7 @@ public class MainMenuScreen : IScreen
                         "Songs"
                     );
                     ScreenManager.Instance.ChangeScreen(new SongSelectScreen(
-                        MapParser.LoadAllMaps(songsPath)));
+                        MapParser.LoadAllMaps(songsPath))); 
                     break;
                 case 1:
                     ScreenManager.Instance.ChangeScreen(new SettingsScreen());

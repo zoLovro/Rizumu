@@ -11,6 +11,8 @@ public static class MapParser
 {
     public static List<MapMetadata> LoadAllMaps(string mapsDir)
     {
+        if (!Directory.Exists(mapsDir))
+            Directory.CreateDirectory(mapsDir);
         var mapList = new List<MapMetadata>();
 
         foreach (var folder in Directory.GetDirectories(mapsDir))
