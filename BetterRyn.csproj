@@ -13,9 +13,6 @@
     <ItemGroup>
         <None Remove="Icon.ico"/>
         <None Remove="Icon.bmp"/>
-        <None Update="Diagnostics\ffmpeg.exe">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Icon.ico">

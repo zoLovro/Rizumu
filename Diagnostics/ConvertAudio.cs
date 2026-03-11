@@ -11,7 +11,7 @@ public static class ConvertAudio
     {
         var process = new Process();
         process.StartInfo.FileName = OperatingSystem.IsWindows()
-            ? Path.Combine(AppContext.BaseDirectory, "Diagnostics", "ffmpeg.exe")
+            ? Path.Combine(AppContext.BaseDirectory, "Tools", "ffmpeg.exe")
             : "ffmpeg";
 
         process.StartInfo.Arguments =
