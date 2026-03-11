@@ -86,7 +86,7 @@ public class MainMenuScreen : IScreen
             {
                 _exitPromptSelectedIndex--;
                 if (_exitPromptSelectedIndex < 0) _exitPromptSelectedIndex = _exitPromptItems.Length - 1;
-            }
+            }   
 
             if (current.IsKeyDown(Keys.Enter) && _previousKeyboard.IsKeyUp(Keys.Enter))
             {

@@ -164,7 +164,7 @@ public static class MapParser
             if (inTimingPoints)
             {
                 var parts = line.Split(",");
-                if (parts[6] == "0") continue;
+                if (parts.Length < 8 || parts[6] == "0") continue;
                 else
                 {
                     if (float.TryParse(parts[1], System.Globalization.NumberStyles.Any,

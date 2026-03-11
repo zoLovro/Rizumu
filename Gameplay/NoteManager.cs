@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -67,7 +68,7 @@ public class NoteManager
             { var parts = line.Split(":");
 
             if (parts[0].Trim() == "AudioFileName") map.AudioFileName = parts[1].Trim();
-            if (parts[0].Trim() == "PreviewTime") map.PreviewTime = float.Parse(parts[1].Trim());
+            if (parts[0].Trim() == "PreviewTime" && float.TryParse(parts[1].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out float pt)) map.PreviewTime = pt;
             if (parts[0].Trim() == "Title") map.Title = parts[1].Trim();
             if (parts[0].Trim() == "Artist") map.Artist = parts[1].Trim();
             }
@@ -97,7 +98,7 @@ public class NoteManager
                         lane = 3;
                         break;
                 }
-                var time = float.Parse(parts[2]);
+                if (!float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out float time)) continue;
 
                 switch (parts[3].Trim())
                 {
@@ -105,7 +106,7 @@ public class NoteManager
                         _noteQueue.Enqueue(new NoteData { Time = time, Lane = lane, Type = NoteType.Tap});
                         break;
                     case "128": 
-                        float endTime = float.Parse(parts[5].Split(':')[0]);
+                        if (!float.TryParse(parts[5].Split(':')[0], NumberStyles.Float, CultureInfo.InvariantCulture, out float endTime)) continue;
                         _noteQueue.Enqueue(new NoteData { Time = time, Lane = lane, Duration = endTime - time, Type = NoteType.Hold});
                         break;
                 }

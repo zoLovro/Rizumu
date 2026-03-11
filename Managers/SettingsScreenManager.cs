@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using BetterRyn.Screens;
@@ -126,16 +127,20 @@ public class SettingsScreenManager
 
     public void Save()
     {
+        // Guard against -1 from Discard() if the saved resolution wasn't in our list
+        if (CurrentResolutionIndex < 0 || CurrentResolutionIndex >= Resolutions.Length)
+            CurrentResolutionIndex = 3; // fallback: 1920x1080
+
         string[] lines = new[]
         {
             $"keybinds={string.Join(", ", Keybinds)}",
-            $"offset={Offset}",
+            $"offset={Offset.ToString(CultureInfo.InvariantCulture)}",
             $"resolution={Resolutions[CurrentResolutionIndex]}",
-            $"fullscreen={( Fullscreen ? "YES" : "NO" )}",
-            $"volume={Volume}"
+            $"fullscreen={(Fullscreen ? "YES" : "NO")}",
+            $"volume={Volume.ToString(CultureInfo.InvariantCulture)}"
         };
         File.WriteAllLines(Path.Combine(_gameFolder, "settings.txt"), lines);
-        
+
         string[] res = Resolutions[CurrentResolutionIndex].Split('x');
         RynGame.Instance.ApplyResolution(int.Parse(res[0]), int.Parse(res[1]));
     }
@@ -158,16 +163,22 @@ public class SettingsScreenManager
                         .ToArray();
                     break;
                 case "offset":
-                    Offset = float.Parse(parts[1].Trim());
+                    // InvariantCulture ensures "120.5" parses correctly on any system locale
+                    if (float.TryParse(parts[1].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out float offset))
+                        Offset = offset;
                     break;
                 case "resolution":
-                    CurrentResolutionIndex = Array.IndexOf(Resolutions, parts[1].Trim());
+                    int resIndex = Array.IndexOf(Resolutions, parts[1].Trim());
+                    if (resIndex >= 0) // ignore unknown resolutions instead of storing -1
+                        CurrentResolutionIndex = resIndex;
                     break;
                 case "fullscreen":
                     Fullscreen = parts[1].Trim() == "YES";
                     break;
                 case "volume":
-                    Volume = float.Parse(parts[1].Trim());
+                    // InvariantCulture ensures "100.0" parses correctly on any system locale
+                    if (float.TryParse(parts[1].Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out float volume))
+                        Volume = volume;
                     break;
             }
         }

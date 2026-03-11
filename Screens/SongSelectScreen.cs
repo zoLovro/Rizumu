@@ -59,6 +59,15 @@ public class SongSelectScreen : IScreen
     {
         KeyboardState current = Keyboard.GetState();
 
+        // If there are no songs, ESC is the only valid action
+        if (_mapsets.Count == 0)
+        {
+            if (current.IsKeyDown(Keys.Escape) && _previousKeyboard.IsKeyUp(Keys.Escape))
+                ScreenManager.Instance.ChangeScreen(new MainMenuScreen());
+            _previousKeyboard = current;
+            return;
+        }
+
         // MapSets
         if (_state == SelectState.SongList)
         {
@@ -136,6 +145,13 @@ public class SongSelectScreen : IScreen
 
     public void Draw(SpriteBatch spriteBatch)
     {
+        if (_mapsets.Count == 0)
+        {
+            spriteBatch.DrawString(_font, "No songs found in Assets/Songs/", new Vector2(50, 50), Color.White);
+            spriteBatch.DrawString(_font, "Press ESC to go back", new Vector2(50, 100), Color.Gray);
+            return;
+        }
+
         if (_backgroundPreview != null)
             spriteBatch.Draw(_backgroundPreview, _graphicsDevice.Viewport.Bounds, Color.White * 0.4f);
 
@@ -211,6 +227,8 @@ public class SongSelectScreen : IScreen
     {
         _backgroundPreview?.Dispose();
         _backgroundPreview = null;
+
+        if (_mapsets.Count == 0) return;
 
         string path = _mapsets[_selectedSongIndex].Difficulties[0].BackgroundPath;
         if (path == null || !System.IO.File.Exists(path)) return;
