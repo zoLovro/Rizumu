@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace BetterRyn.Diagnostics;
+namespace BetterRyn.Tools;
 
 // NEEDS ffmpeg.exe in Diagnostics to work!!!!!
 public static class ConvertAudio

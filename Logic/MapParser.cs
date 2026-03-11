@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BetterRyn.Diagnostics;
+using BetterRyn.Tools;
 
 namespace BetterRyn.Logic;
 
