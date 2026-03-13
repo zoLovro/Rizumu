@@ -3,8 +3,7 @@
 A free-to-win, osu! inspired rhythm game.
 
 # Status
-This project is under developement, but a version 1 has been released.
-
+This project is under developement, but an alpha version has been released.
 
 
 # Download
