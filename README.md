@@ -1,4 +1,4 @@
-# Rizumu
+# Ryn
 
 A free-to-win, osu! inspired rhythm game.
 
