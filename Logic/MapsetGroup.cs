@@ -1,4 +1,6 @@
-﻿namespace BetterRyn.Logic;
+﻿using Microsoft.Xna.Framework.Graphics;
+
+namespace BetterRyn.Logic;
 using System.Collections.Generic;
 
 public class MapsetGroup

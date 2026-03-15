@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using BetterRyn.Logic;
 using BetterRyn.Managers;
@@ -18,12 +19,15 @@ public class SongSelectScreen : IScreen
     private int _selectedSongIndex;
     private int _selectedDifficultyIndex;
     private Texture2D _backgroundPreview;
+    private Texture2D _coverTexture;
     private KeyboardState _previousKeyboard;
     private SelectState _state = SelectState.SongList;
-    private int _scrollOffset = 0;
-    private const int SongRowHeight = 50;
-    private const int DiffRowHeight = 40;
+    private const int SongRowHeight = 70;
+    private const int DiffRowHeight = 50;
     private const int ListStartY = 50;
+    private float _targetScrollOffset;
+    private float _visualScrollOffset;
+    private Dictionary<MapsetGroup, Texture2D> _coverTextures = new();
     
     
     public SongSelectScreen(List<MapMetadata> rawDifficulties)
@@ -51,8 +55,24 @@ public class SongSelectScreen : IScreen
         _rectangle.SetData(new[] { Color.White });
 
         _font = content.Load<SpriteFont>("GameFont");
-        
-        LoadBackground();
+
+        // Load all map thumbnails
+        foreach (var mapset in _mapsets)
+        {
+            string path = mapset.Difficulties[0].BackgroundPath;
+            if (path != null && File.Exists(path))
+            {
+                using var stream = File.OpenRead(path);
+                _coverTextures[mapset] = Texture2D.FromStream(_graphicsDevice, stream);
+            }
+            else
+            {
+                _coverTextures[mapset] = null; // optional fallback
+            }
+        }
+
+        LoadBackground(); // load the selected map's background
+        UpdateScrollOffset();
     }
 
     public void Update(GameTime gameTime)
@@ -140,57 +160,132 @@ public class SongSelectScreen : IScreen
             }
         }
 
+        _visualScrollOffset = MathHelper.Lerp(
+            _visualScrollOffset,
+            _targetScrollOffset,
+            0.15f);
+
         _previousKeyboard = current;
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+   public void Draw(SpriteBatch spriteBatch)
+{
+    if (_mapsets.Count == 0)
     {
-        if (_mapsets.Count == 0)
+        spriteBatch.DrawString(_font, "No songs found in Assets/Songs/", new Vector2(50, 50), Color.White);
+        spriteBatch.DrawString(_font, "Press ESC to go back", new Vector2(50, 100), Color.Gray);
+        return;
+    }
+
+    if (_backgroundPreview != null)
+        spriteBatch.Draw(_backgroundPreview, _graphicsDevice.Viewport.Bounds, Color.White * 0.35f);
+
+    int screenHeight = _graphicsDevice.Viewport.Height;
+    int screenWidth = _graphicsDevice.Viewport.Width;
+
+    int wheelX = 0;
+    int wheelWidth = (4*screenWidth) / 9;
+
+    int thumbnailSize = SongRowHeight - 10;
+
+    int yOffset = (int)(- _visualScrollOffset);
+
+    for (int i = 0; i < _mapsets.Count; i++)
+    {
+        MapsetGroup mapset = _mapsets[i];
+
+        if (yOffset + SongRowHeight > 0 && yOffset < screenHeight)
         {
-            spriteBatch.DrawString(_font, "No songs found in Assets/Songs/", new Vector2(50, 50), Color.White);
-            spriteBatch.DrawString(_font, "Press ESC to go back", new Vector2(50, 100), Color.Gray);
-            return;
+            bool selected = i == _selectedSongIndex && _state == SelectState.SongList;
+
+            Color panelColor = selected
+                ? new Color(70,130,180)
+                : new Color(40,40,40);
+
+            Rectangle panelRect = new Rectangle(
+                wheelX,
+                yOffset,
+                wheelWidth,
+                SongRowHeight
+            );
+
+            spriteBatch.Draw(_rectangle, panelRect, panelColor);
+
+            // Thumbnail
+            if (_coverTextures.TryGetValue(mapset, out Texture2D thumb) && thumb != null)
+            {
+                spriteBatch.Draw(
+                    thumb,
+                    new Rectangle(
+                        wheelX + 5,
+                        yOffset + 5,
+                        thumbnailSize,
+                        thumbnailSize
+                    ),
+                    Color.White
+                );
+            }
+
+            float textStartX = wheelX + thumbnailSize + 15;
+            float textMaxWidth = wheelWidth - thumbnailSize - 25;
+
+            string title = $"{mapset.Artist} - {mapset.SongTitle}";
+            string truncated = TruncateText(title, textMaxWidth);
+
+            spriteBatch.DrawString(
+                _font,
+                truncated,
+                new Vector2(textStartX, yOffset + 10),
+                Color.White
+            );
         }
 
-        if (_backgroundPreview != null)
-            spriteBatch.Draw(_backgroundPreview, _graphicsDevice.Viewport.Bounds, Color.White * 0.4f);
+        yOffset += SongRowHeight;
 
-        int screenHeight = _graphicsDevice.Viewport.Height;
-        int yOffset = ListStartY - _scrollOffset;
-
-        for (int i = 0; i < _mapsets.Count; i++)
+        // DIFFICULTIES
+        if (mapset.IsExpanded)
         {
-            MapsetGroup mapset = _mapsets[i];
-
-            if (yOffset + SongRowHeight > 0 && yOffset < screenHeight)
+            for (int j = 0; j < mapset.Difficulties.Count; j++)
             {
-                if (i == _selectedSongIndex && _state == SelectState.SongList)
+                if (yOffset + DiffRowHeight > 0 && yOffset < screenHeight)
                 {
-                    spriteBatch.Draw(_rectangle, new Rectangle(40, yOffset, 300, 40), Color.Blue * 0.5f);
-                }
-                spriteBatch.DrawString(_font, $"{mapset.Artist} - {mapset.SongTitle}", new Vector2(50, yOffset), Color.White);
-            }
-            yOffset += SongRowHeight;
+                    MapMetadata diff = mapset.Difficulties[j];
 
-            // Diffs
-            if (mapset.IsExpanded)
-            {
-                for (int j = 0; j < mapset.Difficulties.Count; j++)
-                {
-                    if (yOffset + DiffRowHeight > 0 && yOffset < screenHeight)
-                    {
-                        MapMetadata diff = mapset.Difficulties[j];
-                        if (j == _selectedDifficultyIndex && _state == SelectState.DifficultyList)
-                        {
-                            spriteBatch.Draw(_rectangle, new Rectangle(70, yOffset, 200, 30), Color.DarkRed * 0.5f);
-                        }
-                        spriteBatch.DrawString(_font, $"[{diff.DifficultyName}]", new Vector2(80, yOffset), Color.LightGray);
-                    }
-                    yOffset += DiffRowHeight;
+                    bool selectedDiff =
+                        j == _selectedDifficultyIndex &&
+                        _state == SelectState.DifficultyList;
+
+                    Color diffColor = selectedDiff
+                        ? new Color(150,60,60)
+                        : new Color(60,60,60);
+
+                    Rectangle diffRect = new Rectangle(
+                        wheelX + 25,
+                        yOffset,
+                        wheelWidth - 25,
+                        DiffRowHeight
+                    );
+
+                    spriteBatch.Draw(_rectangle, diffRect, diffColor);
+
+                    float diffTextWidth = wheelWidth - 60;
+
+                    string truncated =
+                        TruncateText(diff.DifficultyName, diffTextWidth);
+
+                    spriteBatch.DrawString(
+                        _font,
+                        truncated,
+                        new Vector2(wheelX + 40, yOffset + 6),
+                        Color.LightGray
+                    );
                 }
+
+                yOffset += DiffRowHeight;
             }
         }
     }
+}
 
     private void UpdateScrollOffset()
     {
@@ -220,7 +315,7 @@ public class SongSelectScreen : IScreen
 
         int screenHeight = _graphicsDevice?.Viewport.Height ?? 720;
 
-        _scrollOffset = targetY - screenHeight / 2;
+        _targetScrollOffset = targetY - (screenHeight / 2) + (SongRowHeight / 2);
     }
 
     private void LoadBackground()
@@ -233,8 +328,11 @@ public class SongSelectScreen : IScreen
         string path = _mapsets[_selectedSongIndex].Difficulties[0].BackgroundPath;
         if (path == null || !System.IO.File.Exists(path)) return;
 
-        using var stream = System.IO.File.OpenRead(path);
-        _backgroundPreview = Texture2D.FromStream(_graphicsDevice, stream);
+        using var stream1 = File.OpenRead(path);
+        _backgroundPreview = Texture2D.FromStream(_graphicsDevice, stream1);
+
+        using var stream2 = File.OpenRead(path);
+        _coverTexture = Texture2D.FromStream(_graphicsDevice, stream2);
     }
 
     public void Dispose()
@@ -246,5 +344,20 @@ public class SongSelectScreen : IScreen
     {
         SongList,
         DifficultyList
+    }
+    
+    string TruncateText(string text, float maxWidth)
+    {
+        if (_font.MeasureString(text).X <= maxWidth)
+            return text;
+
+        while (text.Length > 0)
+        {
+            text = text.Substring(0, text.Length - 1);
+            if (_font.MeasureString(text + "...").X <= maxWidth)
+                return text + "...";
+        }
+
+        return "...";
     }
 }

@@ -20,6 +20,7 @@ public class MainMenuScreen : IScreen
     private int _exitPromptSelectedIndex;
     private KeyboardState _previousKeyboard;
     private bool _askingIfExit = false;
+    
 
     public MainMenuScreen()
     {
@@ -101,39 +102,77 @@ public class MainMenuScreen : IScreen
         _previousKeyboard = current;
     }
 
-    public void Draw(SpriteBatch spriteBatch)
+   public void Draw(SpriteBatch spriteBatch)
+{
+    int screenWidth = _rectangle.GraphicsDevice.Viewport.Width;
+    int screenHeight = _rectangle.GraphicsDevice.Viewport.Height;
+    
+    int menuX = 20;                 
+    int menuWidth = screenWidth - 40;
+    int menuHeight = 60;
+    int spacing = 20;
+    int yOffset = 150;
+
+    // Main menu
+    for (int i = 0; i < _menuItems.Length; i++)
     {
-        int yOffset = 50;
+        string item = _menuItems[i];
+        bool selected = (!_askingIfExit && i == _selectedIndex);
 
-        for (int i = 0; i < _menuItems.Length; i++)
+        Color bgColor = selected ? Color.Lerp(new Color(40, 40, 40), new Color(70, 130, 180), 0.7f)
+                                 : new Color(40, 40, 40);
+
+        Rectangle rect = new Rectangle(menuX, yOffset, menuWidth, menuHeight);
+        spriteBatch.Draw(_rectangle, rect, bgColor);
+
+        Vector2 textSize = _font.MeasureString(item);
+        Vector2 textPos = new Vector2(menuX + 30, yOffset + (menuHeight - textSize.Y) / 2);
+        spriteBatch.DrawString(_font, item, textPos, Color.White);
+
+        if (selected)
         {
-            string item = _menuItems[i];
-
-            if (i == _selectedIndex)
-            {
-                spriteBatch.Draw(_rectangle, new Rectangle(40, yOffset, 300, 40), Color.Blue * 0.5f);
-            }
-            spriteBatch.DrawString(_font, item, new Vector2(50, yOffset), Color.White);
-            yOffset += 50;
+            Vector2 arrowPos = new Vector2(menuX + 5, yOffset + (menuHeight - textSize.Y) / 2);
+            spriteBatch.DrawString(_font, ">", arrowPos, Color.White);
         }
 
-        if (_askingIfExit)
+        yOffset += menuHeight + spacing;
+    }
+
+    // Exit prompt
+    if (_askingIfExit)
+    {
+        string prompt = "Are you sure you want to quit?";
+        Vector2 promptSize = _font.MeasureString(prompt);
+        Vector2 promptPos = new Vector2((screenWidth - promptSize.X) / 2, screenHeight / 2 - 60);
+        spriteBatch.DrawString(_font, prompt, promptPos, Color.White);
+
+        // Options centered
+        int optionWidth = 180;
+        int optionHeight = 50;
+        int optionSpacing = 50;
+        int totalWidth = _exitPromptItems.Length * optionWidth + (_exitPromptItems.Length - 1) * optionSpacing;
+        int startX = (screenWidth - totalWidth) / 2;
+        int promptY = screenHeight / 2;
+
+        for (int i = 0; i < _exitPromptItems.Length; i++)
         {
-            int xOffset = 300;
+            string option = _exitPromptItems[i];
+            bool selected = i == _exitPromptSelectedIndex;
 
-            for (int i = 0; i < _exitPromptItems.Length; i++)
-            {
-                string item = _exitPromptItems[i];
+            Color bgColor = selected ? Color.Lerp(new Color(40, 40, 40), new Color(70, 130, 180), 0.7f)
+                                     : new Color(40, 40, 40);
 
-                if (i == _exitPromptSelectedIndex)
-                {
-                    spriteBatch.Draw(_rectangle, new Rectangle(xOffset, 500, 300, 40), Color.Blue * 0.5f);
-                }
-                spriteBatch.DrawString(_font, item, new Vector2(xOffset, 500), Color.White);
-                xOffset += 300;
-            }
+            Rectangle rect = new Rectangle(startX, promptY, optionWidth, optionHeight);
+            spriteBatch.Draw(_rectangle, rect, bgColor);
+
+            Vector2 textSize = _font.MeasureString(option);
+            Vector2 textPos = new Vector2(startX + (optionWidth - textSize.X) / 2, promptY + (optionHeight - textSize.Y) / 2);
+            spriteBatch.DrawString(_font, option, textPos, Color.White);
+
+            startX += optionWidth + optionSpacing;
         }
-    }   
+    }
+}
 
     
     

@@ -166,3 +166,4 @@ C:/Users/lovro/Desktop/Projects/BetterRyn/bin/Debug/net9.0/Content/scorebar-ki.x
 /home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/BetterRyn.pdb
 /home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/BetterRyn.genruntimeconfig.cache
 /home/lovrohk/RiderProjects/BetterRyn/obj/Debug/net9.0/ref/BetterRyn.dll
+/home/lovrohk/RiderProjects/BetterRyn/bin/Debug/net9.0/Tools/ffmpeg.exe
