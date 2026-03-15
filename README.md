@@ -7,7 +7,7 @@ This project is under developement, but an alpha version has been released.
 
 
 # Download
-Head to the [Latest release](https://github.com/zoLovro/Rizumu/releases/tag/PreRelease) and download the file for your operating system.
+Head to the [Latest release](https://github.com/zoLovro/Rizumu/releases/tag/Release-0.1) and download the file for your operating system.
 
 ## Additional instructions for Linux users
 If you are using a Linux machine, you will have to download ffmpeg into your root folder (preferably using a package manager).
