@@ -21,4 +21,5 @@
 * Add a graph (like osu)
 
 # OTHER
-* Make .osz files extract automatically
+* ~~Make .osz files extract automatically~~
+* Make maps update whenever a new one is dropped in

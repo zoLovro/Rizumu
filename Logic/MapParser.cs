@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BetterRyn.Tools;
+using System.IO.Compression;
 
 namespace BetterRyn.Logic;
 
@@ -13,6 +14,8 @@ public static class MapParser
     {
         if (!Directory.Exists(mapsDir))
             Directory.CreateDirectory(mapsDir);
+        
+        ExtractOszArchives(mapsDir);
         var mapList = new List<MapMetadata>();
 
         foreach (var folder in Directory.GetDirectories(mapsDir))
@@ -182,5 +185,31 @@ public static class MapParser
             }
         }
         return 0f;
+    }
+    
+    private static void ExtractOszArchives(string mapsDir)
+    {
+        var oszFiles = Directory.GetFiles(mapsDir, "*.osz");
+
+        foreach (var osz in oszFiles)
+        {
+            try
+            {
+                string folderName = Path.GetFileNameWithoutExtension(osz);
+                string extractPath = Path.Combine(mapsDir, folderName);
+
+                if (!Directory.Exists(extractPath))
+                {
+                    Directory.CreateDirectory(extractPath);
+                    ZipFile.ExtractToDirectory(osz, extractPath);
+                }
+
+                File.Delete(osz);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Failed to extract {osz}: {e.Message}");
+            }
+        }
     }
 }
