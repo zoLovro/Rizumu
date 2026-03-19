@@ -1,13 +1,12 @@
 # Ryn
 
-A free-to-win, osu! inspired rhythm game.
+A free-to-win, osu! mania-inspired rhythm game.
 
 # Status
-This project is under developement, but an alpha version has been released.
+This project is under developement, but an alpha version has been released. This project will continue to evolve until all set goals will be reached.
 
-
-# Download
-Head to the [Latest release](https://github.com/zoLovro/Rizumu/releases/tag/Release-0.1) and download the file for your operating system.
+# Downloading Ryn
+If you would like to try out my game, head to the [Latest release](https://github.com/zoLovro/Rizumu/releases/tag/Release-0.1) and download the file for your operating system.
 
 ## Additional instructions for Linux users
 If you are using a Linux machine, you will have to download ffmpeg into your root folder (preferably using a package manager).
@@ -51,4 +50,4 @@ If your distro is not on the list, use the appropriate package manager.
 A more modern way is still under developement.
 
 ## Licence
-The code and framework for Rizumu are lincenced under the MIT licence.
+The code and framework for Rizumu are lincenced under the [MIT licence](https://opensource.org/license/MIT).
